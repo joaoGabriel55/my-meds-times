@@ -1,43 +1,43 @@
 import { MedicationScheduleRepositoryPort } from "@/src/application/ports/MedicationScheduleRepositoryPort";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
-import Storage from "expo-sqlite/kv-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const KEY = "medicationSchedules";
 
 export function LocalStorageMedicationScheduleRepository(): MedicationScheduleRepositoryPort {
   return {
-    create: (schedule: MedicationSchedule) => {
-      const medicationSchedules = Storage.getItemSync(KEY);
+    create: async (schedule: MedicationSchedule) => {
+      const medicationSchedules = await AsyncStorage.getItem(KEY);
 
       const newMedicationSchedules = medicationSchedules
         ? [...JSON.parse(medicationSchedules), schedule]
         : [schedule];
 
-      Storage.setItemSync(KEY, JSON.stringify(newMedicationSchedules));
+      await AsyncStorage.setItem(KEY, JSON.stringify(newMedicationSchedules));
 
       const lastSchedule =
         newMedicationSchedules[newMedicationSchedules.length - 1];
 
-      return lastSchedule as MedicationSchedule;
+      return lastSchedule;
     },
-    update: (id: string, schedule: MedicationSchedule) => {
-      const medicationSchedules = Storage.getItemSync(KEY);
+    update: async (id: string, schedule: MedicationSchedule) => {
+      const input = {
+        ...schedule,
+        startDateTime: schedule.startDateTime.toLocaleString(),
+      };
+
+      const medicationSchedules = await AsyncStorage.getItem(KEY);
 
       const newMedicationSchedules = medicationSchedules
         ? JSON.parse(medicationSchedules).map((s: MedicationSchedule) =>
-            s.id === id ? schedule : s,
+            s.id === id ? input : s,
           )
-        : [schedule];
+        : [input];
 
-      Storage.setItemSync(KEY, JSON.stringify(newMedicationSchedules));
-
-      const updatedSchedule =
-        newMedicationSchedules[newMedicationSchedules.length - 1];
-
-      return updatedSchedule as MedicationSchedule;
+      await AsyncStorage.setItem(KEY, JSON.stringify(newMedicationSchedules));
     },
-    delete: (id: string) => {
-      const medicationSchedules = Storage.getItemSync(KEY);
+    delete: async (id: string) => {
+      const medicationSchedules = await AsyncStorage.getItem(KEY);
 
       const newMedicationSchedules = medicationSchedules
         ? JSON.parse(medicationSchedules).filter(
@@ -45,10 +45,10 @@ export function LocalStorageMedicationScheduleRepository(): MedicationScheduleRe
           )
         : [];
 
-      Storage.setItemSync(KEY, JSON.stringify(newMedicationSchedules));
+      await AsyncStorage.setItem(KEY, JSON.stringify(newMedicationSchedules));
     },
-    findById: (id: string) => {
-      const medicationSchedules = Storage.getItemSync(KEY);
+    findById: async (id: string) => {
+      const medicationSchedules = await AsyncStorage.getItem(KEY);
 
       const foundSchedule = medicationSchedules
         ? JSON.parse(medicationSchedules).find(
@@ -58,10 +58,11 @@ export function LocalStorageMedicationScheduleRepository(): MedicationScheduleRe
 
       return foundSchedule;
     },
-    findAll: () => {
-      const medicationSchedules = Storage.getItemSync(KEY);
+    findAll: async () => {
+      const items = await AsyncStorage.getItem(KEY);
+      const parsedItems = items ? JSON.parse(items) : [];
 
-      return medicationSchedules ? JSON.parse(medicationSchedules) : [];
+      return parsedItems;
     },
   };
 }

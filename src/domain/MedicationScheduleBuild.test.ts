@@ -4,7 +4,7 @@ describe("medicationScheduleBuild", () => {
   it("generate the schedule", () => {
     const schedule = medicationScheduleBuild({
       intervalHours: 8,
-      startDateTime: new Date("2023-01-01T08:00:00Z"),
+      startDateTime: "2023-01-01T08:00:00Z",
       days: 3,
     });
 

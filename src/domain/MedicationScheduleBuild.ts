@@ -9,7 +9,8 @@ export function medicationScheduleBuild({
   "intervalHours" | "startDateTime" | "days"
 >): Date[] {
   const schedule: Date[] = [];
-  const endTime = new Date(startDateTime.getTime());
+  const endTime = new Date(startDateTime);
+
   endTime.setDate(endTime.getDate() + days);
 
   let current = new Date(startDateTime);
