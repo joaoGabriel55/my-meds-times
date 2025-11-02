@@ -1,0 +1,105 @@
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+  scrollContent: {
+    padding: 24,
+    paddingBottom: 100,
+  },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 18,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  titleText: {
+    fontSize: 24,
+    fontWeight: "600",
+    marginLeft: 6,
+  },
+  iconButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#f2f2f2",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#888",
+    marginBottom: 18,
+  },
+  bold: {
+    fontWeight: "bold",
+    color: "#222",
+  },
+  cardList: {
+    gap: 18,
+  },
+  card: {
+    borderRadius: 14,
+    padding: 18,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 2,
+    marginBottom: 2,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  cardDesc: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 8,
+  },
+  cardDetails: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
+    marginBottom: 8,
+  },
+  cardDetail: {
+    fontSize: 13,
+    color: "#444",
+    backgroundColor: "#f5f5f5",
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  trashButton: {
+    alignSelf: "flex-end",
+    marginTop: 2,
+    padding: 6,
+    borderRadius: 8,
+    backgroundColor: "#fff",
+  },
+  fab: {
+    position: "absolute",
+    right: 24,
+    bottom: 24,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 6,
+    zIndex: 10,
+  },
+});
