@@ -1,0 +1,76 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "confirm": "Confirm",
+    "back": "Back",
+    "ok": "OK",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "myMedications": {
+    "title": "My Medications",
+    "subtitle": "{{count}} medication scheduled.",
+    "subtitle_plural": "{{count}} medications scheduled.",
+    "noMedications": "No medications scheduled yet",
+    "addButton": "Add Medication"
+  },
+  "medicationCard": {
+    "intervalLabel": "{{hours}}h interval",
+    "daysLabel": "{{days}} day",
+    "daysLabel_plural": "{{days}} days",
+    "scheduledHours": "Scheduled Hours",
+    "startDate": "Start Date"
+  },
+  "medicationForm": {
+    "newTitle": "New Med Times",
+    "newSubtitle": "Register a schedule for your medication.",
+    "editTitle": "Edit Med Times",
+    "editSubtitle": "Update your medication schedule.",
+    "fields": {
+      "medicationName": "Medication Name",
+      "medicationNamePlaceholder": "Enter medication name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter description (optional)",
+      "days": "Days",
+      "daysPlaceholder": "Number of days",
+      "interval": "Interval",
+      "intervalPlaceholder": "Hours between doses",
+      "startDateTime": "Start Date Time"
+    },
+    "validation": {
+      "nameRequired": "Medication name is required",
+      "daysRequired": "Number of days is required",
+      "daysMin": "Days must be at least 1",
+      "intervalRequired": "Interval is required",
+      "intervalMin": "Interval must be at least 1 hour",
+      "startDateRequired": "Start date and time is required",
+      "startDateFuture": "Start date must be in the future"
+    }
+  },
+  "notifications": {
+    "medicationReminder": "Medication Reminder",
+    "timeToTake": "Time to take {{medication}}",
+    "permissionTitle": "Enable Notifications",
+    "permissionMessage": "Please enable notifications to receive medication reminders.",
+    "permissionDenied": "Notification permissions denied"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "languageDescription": "Select your preferred language",
+    "theme": "Theme",
+    "selectTheme": "Select Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System"
+  },
+  "errors": {
+    "generic": "An error occurred. Please try again.",
+    "loadFailed": "Failed to load medications",
+    "saveFailed": "Failed to save medication",
+    "deleteFailed": "Failed to delete medication"
+  }
+}

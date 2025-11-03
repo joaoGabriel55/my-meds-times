@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
   scrollContent: {
     padding: 24,
     paddingBottom: 100,
+    flexGrow: 1,
   },
   headerRow: {
     flexDirection: "row",
@@ -28,19 +29,15 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#f2f2f2",
     justifyContent: "center",
     alignItems: "center",
-    elevation: 2,
   },
   subtitle: {
     fontSize: 16,
-    color: "#888",
     marginBottom: 18,
   },
   bold: {
     fontWeight: "bold",
-    color: "#222",
   },
   cardList: {
     gap: 18,
@@ -48,22 +45,15 @@ export const styles = StyleSheet.create({
   card: {
     borderRadius: 14,
     padding: 18,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 2,
     marginBottom: 2,
+    flex: 1,
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: "600",
-    marginBottom: 4,
   },
   cardDesc: {
     fontSize: 14,
-    color: "#666",
-    marginBottom: 8,
   },
   cardDetails: {
     flexDirection: "row",
@@ -73,18 +63,14 @@ export const styles = StyleSheet.create({
   },
   cardDetail: {
     fontSize: 13,
-    color: "#444",
-    backgroundColor: "#f5f5f5",
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 2,
   },
   trashButton: {
-    alignSelf: "flex-end",
-    marginTop: 2,
+    alignSelf: "flex-start",
     padding: 6,
     borderRadius: 8,
-    backgroundColor: "#fff",
   },
   fab: {
     position: "absolute",
@@ -95,11 +81,6 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.18,
-    shadowRadius: 8,
-    elevation: 6,
     zIndex: 10,
   },
 });

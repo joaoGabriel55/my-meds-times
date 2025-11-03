@@ -1,0 +1,76 @@
+{
+  "common": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "confirm": "Подтвердить",
+    "back": "Назад",
+    "ok": "ОК",
+    "yes": "Да",
+    "no": "Нет"
+  },
+  "myMedications": {
+    "title": "Мои лекарства",
+    "subtitle": "{{count}} лекарство запланировано.",
+    "subtitle_plural": "{{count}} лекарства запланировано.",
+    "noMedications": "Лекарства еще не запланированы",
+    "addButton": "Добавить лекарство"
+  },
+  "medicationCard": {
+    "intervalLabel": "{{hours}}ч интервал",
+    "daysLabel": "{{days}} день",
+    "daysLabel_plural": "{{days}} дней",
+    "scheduledHours": "Запланированные часы",
+    "startDate": "Дата начала"
+  },
+  "medicationForm": {
+    "newTitle": "Новое расписание",
+    "newSubtitle": "Зарегистрируйте расписание для вашего лекарства.",
+    "editTitle": "Редактировать расписание",
+    "editSubtitle": "Обновите расписание приема лекарств.",
+    "fields": {
+      "medicationName": "Название лекарства",
+      "medicationNamePlaceholder": "Введите название лекарства",
+      "description": "Описание",
+      "descriptionPlaceholder": "Введите описание (необязательно)",
+      "days": "Дни",
+      "daysPlaceholder": "Количество дней",
+      "interval": "Интервал",
+      "intervalPlaceholder": "Часы между приемами",
+      "startDateTime": "Дата и время начала"
+    },
+    "validation": {
+      "nameRequired": "Название лекарства обязательно",
+      "daysRequired": "Количество дней обязательно",
+      "daysMin": "Дней должно быть не менее 1",
+      "intervalRequired": "Интервал обязателен",
+      "intervalMin": "Интервал должен быть не менее 1 часа",
+      "startDateRequired": "Дата и время начала обязательны",
+      "startDateFuture": "Дата начала должна быть в будущем"
+    }
+  },
+  "notifications": {
+    "medicationReminder": "Напоминание о лекарстве",
+    "timeToTake": "Время принять {{medication}}",
+    "permissionTitle": "Включить уведомления",
+    "permissionMessage": "Пожалуйста, включите уведомления для получения напоминаний о лекарствах.",
+    "permissionDenied": "Разрешение на уведомления отклонено"
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": "Язык",
+    "languageDescription": "Выберите предпочитаемый язык",
+    "theme": "Тема",
+    "selectTheme": "Выбрать тему",
+    "themeLight": "Светлая",
+    "themeDark": "Темная",
+    "themeSystem": "Системная"
+  },
+  "errors": {
+    "generic": "Произошла ошибка. Пожалуйста, попробуйте снова.",
+    "loadFailed": "Не удалось загрузить лекарства",
+    "saveFailed": "Не удалось сохранить лекарство",
+    "deleteFailed": "Не удалось удалить лекарство"
+  }
+}

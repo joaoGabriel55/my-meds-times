@@ -1,15 +1,18 @@
 import {
-    DarkTheme,
-    DefaultTheme,
-    ThemeProvider,
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider as NavigationThemeProvider,
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { ThemeProvider } from "@/contexts/theme-context";
+import { LanguageProvider } from "@/contexts/language-context";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import * as Notifications from "expo-notifications";
+import "@/lib/i18n";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -21,10 +24,22 @@ Notifications.setNotificationHandler({
 });
 
 export default function RootLayout() {
+  return (
+    <LanguageProvider>
+      <ThemeProvider>
+        <RootLayoutNav />
+      </ThemeProvider>
+    </LanguageProvider>
+  );
+}
+
+function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <NavigationThemeProvider
+      value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+    >
       <Stack
         screenOptions={{
           contentStyle: {
@@ -35,8 +50,12 @@ export default function RootLayout() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="new-med-times" options={{ headerShown: false }} />
         <Stack.Screen name="[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="settings" options={{ headerShown: false }} />
       </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+      <StatusBar
+        style={colorScheme === "dark" ? "light" : "dark"}
+        backgroundColor={useThemeColor({}, "background")}
+      />
+    </NavigationThemeProvider>
   );
 }

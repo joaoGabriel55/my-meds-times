@@ -1,27 +1,32 @@
 import { ThemedText } from "@/components/themed-text";
-import { IconSymbol } from "@/components/ui/icon-symbol";
+import { Shadows } from "@/constants/theme";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { MedicationScheduleService } from "@/src/domain/MedicationScheduleService";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
 import { container } from "@/src/infrastructure/container";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MedicationCard } from "./medication-card.component";
 import { styles } from "./my-medications.styles";
+import { removeMedicationNotifications } from "@/lib/schedule-medication-notifications";
 
 const { MedicationScheduleRepository } = container;
 const medicationScheduleRepository = MedicationScheduleRepository();
 const service = MedicationScheduleService(medicationScheduleRepository);
 
 export function MyMedications() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [schedules, setSchedules] = useState<MedicationSchedule[]>([]);
   const bg = useThemeColor({}, "background");
   const tint = useThemeColor({}, "tint");
-  const icon = useThemeColor({}, "icon");
+  const textSecondary = useThemeColor({}, "textSecondary");
+  const buttonPrimaryText = useThemeColor({}, "buttonPrimaryText");
 
   useNotifications();
 
@@ -29,6 +34,11 @@ export function MyMedications() {
     const loadMedicationSchedules = async () => {
       try {
         const schedules = await service.findAll();
+
+        schedules.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
 
         setSchedules(schedules);
       } catch (error) {
@@ -40,8 +50,15 @@ export function MyMedications() {
 
   const handleRemoveSchedule = async (id: string) => {
     try {
+      const schedule = await service.findById(id);
+
+      if (!schedule) return;
+
       await service.delete(id);
+
       setSchedules(schedules.filter((schedule) => schedule.id !== id));
+
+      await removeMedicationNotifications(schedule);
     } catch (error) {
       console.error("Error removing medication schedule:", error);
     }
@@ -49,21 +66,24 @@ export function MyMedications() {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: bg }]}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={true}
+        bounces={true}
+      >
         <View style={styles.headerRow}>
           <View style={styles.titleContainer}>
-            <IconSymbol name="pills.circle" size={48} color={tint} />
+            <Ionicons name="medkit" size={28} color={textSecondary} />
             <ThemedText type="title" style={styles.titleText}>
-              My Medications
+              {t("myMedications.title")}
             </ThemedText>
           </View>
-          <TouchableOpacity style={styles.iconButton}>
-            <IconSymbol name="moon.circle.fill" size={28} color={icon} />
+          <TouchableOpacity onPress={() => router.push("/settings")}>
+            <Ionicons name="settings" size={28} color={textSecondary} />
           </TouchableOpacity>
         </View>
-        <ThemedText style={styles.subtitle}>
-          <ThemedText style={styles.bold}>{schedules.length}</ThemedText>{" "}
-          medication scheduled.
+        <ThemedText style={[styles.subtitle, { color: textSecondary }]}>
+          {t("myMedications.subtitle", { count: schedules.length })}
         </ThemedText>
         <View style={styles.cardList}>
           {schedules.map((schedule) => (
@@ -76,11 +96,11 @@ export function MyMedications() {
         </View>
       </ScrollView>
       <TouchableOpacity
-        style={[styles.fab, { backgroundColor: tint }]}
+        style={[styles.fab, { backgroundColor: tint }, Shadows.large]}
         onPress={() => router.push("/new-med-times")}
         activeOpacity={0.85}
       >
-        <IconSymbol name="plus" size={28} color="white" />
+        <Ionicons name="add" size={28} color={buttonPrimaryText} />
       </TouchableOpacity>
     </SafeAreaView>
   );

@@ -1,11 +1,13 @@
 import { ThemedText } from "@/components/themed-text";
-import { IconSymbol } from "@/components/ui/icon-symbol";
+import { Shadows } from "@/constants/theme";
 import { formatDateHour, formatDateTime } from "@/helpers/formats";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { medicationScheduleBuild } from "@/src/domain/MedicationScheduleBuild";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
+import { useTranslation } from "react-i18next";
 import { styles } from "./my-medications.styles";
 
 interface MedicationCardProps {
@@ -14,9 +16,15 @@ interface MedicationCardProps {
 }
 
 export function MedicationCard({ schedule, onRemove }: MedicationCardProps) {
+  const { t } = useTranslation();
   const router = useRouter();
 
-  const bg = useThemeColor({}, "background");
+  const cardBg = useThemeColor({}, "card");
+  const textSecondary = useThemeColor({}, "textSecondary");
+  const tint = useThemeColor({}, "tint");
+  const buttonPrimaryText = useThemeColor({}, "buttonPrimaryText");
+  const trashButtonBg = useThemeColor({}, "card");
+  const errorColor = useThemeColor({}, "error");
 
   const { id, name, description, startDateTime, intervalHours, days } =
     schedule;
@@ -29,7 +37,7 @@ export function MedicationCard({ schedule, onRemove }: MedicationCardProps) {
 
   return (
     <TouchableOpacity
-      style={[styles.card, { backgroundColor: bg }]}
+      style={[styles.card, { backgroundColor: cardBg }, Shadows.medium]}
       onPress={() => {
         router.push(`/${id}`);
       }}
@@ -37,36 +45,73 @@ export function MedicationCard({ schedule, onRemove }: MedicationCardProps) {
       <View
         style={{
           flexDirection: "row",
+          alignItems: "flex-start",
           justifyContent: "space-between",
+          marginBottom: 16,
         }}
       >
-        <ThemedText style={styles.cardTitle}>{name}</ThemedText>
+        <View style={{ gap: 4 }}>
+          <ThemedText style={styles.cardTitle}>{name}</ThemedText>
+          {description && (
+            <ThemedText style={[styles.cardDesc, { color: textSecondary }]}>
+              {description}
+            </ThemedText>
+          )}
+        </View>
         <TouchableOpacity
-          style={styles.trashButton}
+          style={[styles.trashButton, { backgroundColor: trashButtonBg }]}
           onPress={() => onRemove(id)}
         >
-          <IconSymbol name="trash" size={20} color="#e74c3c" />
+          <Ionicons name="trash-bin-outline" size={20} color={errorColor} />
         </TouchableOpacity>
       </View>
-      {description && (
-        <ThemedText style={styles.cardDesc}>{description}</ThemedText>
-      )}
       <View style={styles.cardDetails}>
-        <ThemedText style={styles.cardDetail}>
-          {intervalHours}h interval
+        <ThemedText
+          style={[
+            styles.cardDetail,
+            { backgroundColor: tint, color: buttonPrimaryText, height: 28 },
+          ]}
+        >
+          {t("medicationCard.intervalLabel", { hours: intervalHours })}
         </ThemedText>
-        <ThemedText style={styles.cardDetail}>{days} days</ThemedText>
-        <ThemedText style={styles.cardDetail}>
+        <ThemedText
+          style={[
+            styles.cardDetail,
+            { backgroundColor: tint, color: buttonPrimaryText, height: 28 },
+          ]}
+        >
+          {t("medicationCard.daysLabel", { count: days, days })}
+        </ThemedText>
+        <ThemedText
+          style={[
+            styles.cardDetail,
+            { backgroundColor: tint, color: buttonPrimaryText, height: 28 },
+          ]}
+        >
           {formatDateTime(startDateTime)}
         </ThemedText>
       </View>
-      <ThemedText style={styles.cardDesc}>Scheduled Hours</ThemedText>
-      <View style={styles.cardDetails}>
-        {scheduleTimes.map((time, index) => (
-          <ThemedText key={index} style={styles.cardDetail}>
-            {formatDateHour(time)}
-          </ThemedText>
-        ))}
+      <View style={{ gap: 8 }}>
+        <ThemedText style={[styles.cardDesc, { color: textSecondary }]}>
+          {t("medicationCard.scheduledHours")}
+        </ThemedText>
+        <View style={styles.cardDetails}>
+          {scheduleTimes.map((time, index) => (
+            <ThemedText
+              key={index}
+              style={[
+                styles.cardDetail,
+                {
+                  backgroundColor: tint,
+                  color: buttonPrimaryText,
+                  height: 28,
+                },
+              ]}
+            >
+              {formatDateHour(time)}
+            </ThemedText>
+          ))}
+        </View>
       </View>
     </TouchableOpacity>
   );

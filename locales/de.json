@@ -1,0 +1,76 @@
+{
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "confirm": "Bestätigen",
+    "back": "Zurück",
+    "ok": "OK",
+    "yes": "Ja",
+    "no": "Nein"
+  },
+  "myMedications": {
+    "title": "Meine Medikamente",
+    "subtitle": "{{count}} Medikament geplant.",
+    "subtitle_plural": "{{count}} Medikamente geplant.",
+    "noMedications": "Noch keine Medikamente geplant",
+    "addButton": "Medikament hinzufügen"
+  },
+  "medicationCard": {
+    "intervalLabel": "{{hours}}h Intervall",
+    "daysLabel": "{{days}} Tag",
+    "daysLabel_plural": "{{days}} Tage",
+    "scheduledHours": "Geplante Zeiten",
+    "startDate": "Startdatum"
+  },
+  "medicationForm": {
+    "newTitle": "Neue Medikamentenzeit",
+    "newSubtitle": "Registrieren Sie einen Zeitplan für Ihr Medikament.",
+    "editTitle": "Medikamentenzeit bearbeiten",
+    "editSubtitle": "Aktualisieren Sie Ihren Medikamentenzeitplan.",
+    "fields": {
+      "medicationName": "Medikamentenname",
+      "medicationNamePlaceholder": "Medikamentennamen eingeben",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Beschreibung eingeben (optional)",
+      "days": "Tage",
+      "daysPlaceholder": "Anzahl der Tage",
+      "interval": "Intervall",
+      "intervalPlaceholder": "Stunden zwischen Dosen",
+      "startDateTime": "Startdatum und -zeit"
+    },
+    "validation": {
+      "nameRequired": "Medikamentenname ist erforderlich",
+      "daysRequired": "Anzahl der Tage ist erforderlich",
+      "daysMin": "Tage müssen mindestens 1 sein",
+      "intervalRequired": "Intervall ist erforderlich",
+      "intervalMin": "Intervall muss mindestens 1 Stunde sein",
+      "startDateRequired": "Startdatum und -zeit sind erforderlich",
+      "startDateFuture": "Startdatum muss in der Zukunft liegen"
+    }
+  },
+  "notifications": {
+    "medicationReminder": "Medikamentenerinnerung",
+    "timeToTake": "Zeit, {{medication}} einzunehmen",
+    "permissionTitle": "Benachrichtigungen aktivieren",
+    "permissionMessage": "Bitte aktivieren Sie Benachrichtigungen, um Medikamentenerinnerungen zu erhalten.",
+    "permissionDenied": "Benachrichtigungsberechtigungen verweigert"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "languageDescription": "Wählen Sie Ihre bevorzugte Sprache",
+    "theme": "Thema",
+    "selectTheme": "Thema auswählen",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "themeSystem": "System"
+  },
+  "errors": {
+    "generic": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "loadFailed": "Medikamente konnten nicht geladen werden",
+    "saveFailed": "Medikament konnte nicht gespeichert werden",
+    "deleteFailed": "Medikament konnte nicht gelöscht werden"
+  }
+}

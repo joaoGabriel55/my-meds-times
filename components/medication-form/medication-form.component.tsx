@@ -9,8 +9,10 @@ import { InputText } from "@/components/ui/input/input-text";
 import { parseDateToISO } from "@/helpers/formats";
 import { useMedTimesForm } from "@/hooks/med-times/use-med-times-form";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { Shadows } from "@/constants/theme";
 import { MedicationScheduleInput } from "@/src/domain/models/MedicationSchedule";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   values?: MedicationScheduleInput;
@@ -18,11 +20,17 @@ interface Props {
 }
 
 export function MedicationFormComponent({ values, onSubmit }: Props) {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const { formState, handleFormChange, errors, validateForm } = useMedTimesForm(
     { values },
   );
+
+  const errorColor = useThemeColor({}, "error");
+  const buttonPrimaryBg = useThemeColor({}, "buttonPrimary");
+  const buttonPrimaryText = useThemeColor({}, "buttonPrimaryText");
+  const tintColor = useThemeColor({}, "tint");
 
   const handleSubmit = () => {
     if (validateForm()) {
@@ -33,26 +41,26 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
   return (
     <ThemedView style={styles.formContainer}>
       <InputText
-        label="Medication Name"
+        label={t("medicationForm.fields.medicationName")}
         value={formState.name}
         lint={errors.name}
         onChange={(text) => handleFormChange("name", text)}
       />
       <InputText
-        label="Description"
+        label={t("medicationForm.fields.description")}
         value={formState.description || ""}
         onChange={(text) => handleFormChange("description", text)}
       />
 
       <InputNumber
-        label="Days"
+        label={t("medicationForm.fields.days")}
         value={formState.days}
         lint={errors.days}
         onChange={(value) => handleFormChange("days", value)}
       />
 
       <InputNumber
-        label="Interval"
+        label={t("medicationForm.fields.interval")}
         value={formState.intervalHours}
         lint={errors.intervalHours}
         onChange={(value) => handleFormChange("intervalHours", value)}
@@ -66,7 +74,7 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
             paddingBottom: 8,
           }}
         >
-          Start Date Time:
+          {t("medicationForm.fields.startDateTime")}:
         </ThemedText>
         <DateTimePicker
           value={formState.startDateTime}
@@ -76,17 +84,20 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
             handleFormChange("startDateTime", parseDateToISO(date));
           }}
         />
-        <ThemedText style={{ fontSize: 14, color: "red" }}>
+        <ThemedText style={{ fontSize: 14, color: errorColor }}>
           {errors.startDateTime}
         </ThemedText>
       </View>
-      <View style={{ gap: 16, marginTop: 16 }}>
+      <View style={{ gap: 16 }}>
         <TouchableOpacity
-          style={{
-            backgroundColor: useThemeColor({}, "tint"),
-            padding: 12,
-            borderRadius: 8,
-          }}
+          style={[
+            {
+              backgroundColor: buttonPrimaryBg,
+              padding: 12,
+              borderRadius: 8,
+            },
+            Shadows.small,
+          ]}
           onPress={handleSubmit}
         >
           <ThemedText
@@ -94,19 +105,21 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
               fontSize: 18,
               textAlign: "center",
               fontWeight: "bold",
-              color: "white",
+              color: buttonPrimaryText,
             }}
           >
-            Save
+            {t("common.save")}
           </ThemedText>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{
-            borderColor: useThemeColor({}, "tint"),
-            borderWidth: 1,
-            padding: 12,
-            borderRadius: 8,
-          }}
+          style={[
+            {
+              borderColor: tintColor,
+              borderWidth: 1,
+              padding: 12,
+              borderRadius: 8,
+            },
+          ]}
           onPress={() => {
             router.back();
           }}
@@ -116,10 +129,10 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
               fontSize: 18,
               textAlign: "center",
               fontWeight: "bold",
-              color: useThemeColor({}, "tint"),
+              color: tintColor,
             }}
           >
-            Cancel
+            {t("common.cancel")}
           </ThemedText>
         </TouchableOpacity>
       </View>

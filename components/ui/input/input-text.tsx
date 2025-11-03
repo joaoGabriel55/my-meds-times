@@ -13,12 +13,13 @@ interface InputProps {
 
 export function InputText({
   label,
-  value,
   lint,
+  value,
   readOnly,
   onChange,
 }: InputProps) {
   const textColor = useThemeColor({}, "text");
+  const errorColor = useThemeColor({}, "error");
   return (
     <View>
       {label && (
@@ -38,6 +39,7 @@ export function InputText({
           {
             borderColor: useThemeColor({}, "tint"),
             backgroundColor: useThemeColor({}, "background"),
+            color: textColor,
           },
         ]}
         onChangeText={onChange}
@@ -45,7 +47,7 @@ export function InputText({
         readOnly={readOnly}
       />
       {lint && (
-        <ThemedText style={{ fontSize: 14, color: "red" }}>{lint}</ThemedText>
+        <ThemedText style={{ fontSize: 14, color: errorColor }}>{lint}</ThemedText>
       )}
     </View>
   );

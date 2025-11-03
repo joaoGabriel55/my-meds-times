@@ -1,0 +1,76 @@
+{
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "confirm": "تأكيد",
+    "back": "رجوع",
+    "ok": "موافق",
+    "yes": "نعم",
+    "no": "لا"
+  },
+  "myMedications": {
+    "title": "أدويتي",
+    "subtitle": "{{count}} دواء مجدول.",
+    "subtitle_plural": "{{count}} أدوية مجدولة.",
+    "noMedications": "لا توجد أدوية مجدولة بعد",
+    "addButton": "إضافة دواء"
+  },
+  "medicationCard": {
+    "intervalLabel": "فاصل {{hours}} ساعة",
+    "daysLabel": "{{days}} يوم",
+    "daysLabel_plural": "{{days}} أيام",
+    "scheduledHours": "الأوقات المجدولة",
+    "startDate": "تاريخ البدء"
+  },
+  "medicationForm": {
+    "newTitle": "موعد دواء جديد",
+    "newSubtitle": "سجل جدولاً لدوائك.",
+    "editTitle": "تعديل موعد الدواء",
+    "editSubtitle": "قم بتحديث جدول دوائك.",
+    "fields": {
+      "medicationName": "اسم الدواء",
+      "medicationNamePlaceholder": "أدخل اسم الدواء",
+      "description": "الوصف",
+      "descriptionPlaceholder": "أدخل الوصف (اختياري)",
+      "days": "الأيام",
+      "daysPlaceholder": "عدد الأيام",
+      "interval": "الفاصل",
+      "intervalPlaceholder": "ساعات بين الجرعات",
+      "startDateTime": "تاريخ ووقت البدء"
+    },
+    "validation": {
+      "nameRequired": "اسم الدواء مطلوب",
+      "daysRequired": "عدد الأيام مطلوب",
+      "daysMin": "يجب أن تكون الأيام على الأقل 1",
+      "intervalRequired": "الفاصل مطلوب",
+      "intervalMin": "يجب أن يكون الفاصل على الأقل ساعة واحدة",
+      "startDateRequired": "تاريخ ووقت البدء مطلوبان",
+      "startDateFuture": "يجب أن يكون تاريخ البدء في المستقبل"
+    }
+  },
+  "notifications": {
+    "medicationReminder": "تذكير بالدواء",
+    "timeToTake": "حان وقت تناول {{medication}}",
+    "permissionTitle": "تفعيل الإشعارات",
+    "permissionMessage": "يرجى تفعيل الإشعارات لتلقي تذكيرات الأدوية.",
+    "permissionDenied": "تم رفض أذونات الإشعارات"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة",
+    "languageDescription": "اختر لغتك المفضلة",
+    "theme": "المظهر",
+    "selectTheme": "اختر المظهر",
+    "themeLight": "فاتح",
+    "themeDark": "داكن",
+    "themeSystem": "النظام"
+  },
+  "errors": {
+    "generic": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+    "loadFailed": "فشل تحميل الأدوية",
+    "saveFailed": "فشل حفظ الدواء",
+    "deleteFailed": "فشل حذف الدواء"
+  }
+}

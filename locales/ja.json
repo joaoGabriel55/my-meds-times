@@ -1,0 +1,76 @@
+{
+  "common": {
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "confirm": "確認",
+    "back": "戻る",
+    "ok": "OK",
+    "yes": "はい",
+    "no": "いいえ"
+  },
+  "myMedications": {
+    "title": "私の薬",
+    "subtitle": "{{count}}件の薬がスケジュールされています。",
+    "subtitle_plural": "{{count}}件の薬がスケジュールされています。",
+    "noMedications": "まだスケジュールされた薬はありません",
+    "addButton": "薬を追加"
+  },
+  "medicationCard": {
+    "intervalLabel": "{{hours}}時間間隔",
+    "daysLabel": "{{days}}日",
+    "daysLabel_plural": "{{days}}日",
+    "scheduledHours": "予定時刻",
+    "startDate": "開始日"
+  },
+  "medicationForm": {
+    "newTitle": "新しい服薬時間",
+    "newSubtitle": "薬のスケジュールを登録してください。",
+    "editTitle": "服薬時間を編集",
+    "editSubtitle": "薬のスケジュールを更新してください。",
+    "fields": {
+      "medicationName": "薬の名前",
+      "medicationNamePlaceholder": "薬の名前を入力",
+      "description": "説明",
+      "descriptionPlaceholder": "説明を入力（任意）",
+      "days": "日数",
+      "daysPlaceholder": "日数",
+      "interval": "間隔",
+      "intervalPlaceholder": "服用間隔（時間）",
+      "startDateTime": "開始日時"
+    },
+    "validation": {
+      "nameRequired": "薬の名前は必須です",
+      "daysRequired": "日数は必須です",
+      "daysMin": "日数は1以上である必要があります",
+      "intervalRequired": "間隔は必須です",
+      "intervalMin": "間隔は1時間以上である必要があります",
+      "startDateRequired": "開始日時は必須です",
+      "startDateFuture": "開始日時は未来である必要があります"
+    }
+  },
+  "notifications": {
+    "medicationReminder": "服薬リマインダー",
+    "timeToTake": "{{medication}}を服用する時間です",
+    "permissionTitle": "通知を有効にする",
+    "permissionMessage": "服薬リマインダーを受け取るには、通知を有効にしてください。",
+    "permissionDenied": "通知の許可が拒否されました"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "言語",
+    "languageDescription": "お好みの言語を選択してください",
+    "theme": "テーマ",
+    "selectTheme": "テーマを選択",
+    "themeLight": "ライト",
+    "themeDark": "ダーク",
+    "themeSystem": "システム"
+  },
+  "errors": {
+    "generic": "エラーが発生しました。もう一度お試しください。",
+    "loadFailed": "薬の読み込みに失敗しました",
+    "saveFailed": "薬の保存に失敗しました",
+    "deleteFailed": "薬の削除に失敗しました"
+  }
+}

@@ -1,8 +1,9 @@
+import i18n from "@/lib/i18n";
 import { toDate } from "date-fns";
 import { format } from "date-fns/format";
 
-export function formatDateTime(date: string | Date, locale = "en-US"): string {
-  if (locale === "en-US") return format(date, "yyyy-MM-dd HH:mm");
+export function formatDateTime(date: string | Date): string {
+  if (i18n.language === "en") return format(date, "yyyy-MM-dd HH:mm");
   else return format(date, "dd/MM/yyyy HH:mm");
 }
 
