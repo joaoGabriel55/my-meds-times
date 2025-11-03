@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
-import { IconSymbol } from "@/components/ui/icon-symbol";
+import { ThemeToggleButton } from "@/components/ui/theme-toggle-button";
 import { Shadows } from "@/constants/theme";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -8,7 +8,7 @@ import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
 import { container } from "@/src/infrastructure/container";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MedicationCard } from "./medication-card.component";
@@ -23,9 +23,8 @@ export function MyMedications() {
   const [schedules, setSchedules] = useState<MedicationSchedule[]>([]);
   const bg = useThemeColor({}, "background");
   const tint = useThemeColor({}, "tint");
-  const buttonPrimaryText = useThemeColor({}, "buttonPrimaryText");
-  const iconButtonBg = useThemeColor({}, "buttonSecondary");
   const textSecondary = useThemeColor({}, "textSecondary");
+  const buttonPrimaryText = useThemeColor({}, "buttonPrimaryText");
 
   useNotifications();
 
@@ -60,20 +59,12 @@ export function MyMedications() {
       >
         <View style={styles.headerRow}>
           <View style={styles.titleContainer}>
-            <Ionicons name="medkit" size={32} color={textSecondary} />
+            <Ionicons name="medkit" size={28} color={textSecondary} />
             <ThemedText type="title" style={styles.titleText}>
               My Medications
             </ThemedText>
           </View>
-          <TouchableOpacity
-            style={[
-              styles.iconButton,
-              { backgroundColor: iconButtonBg },
-              Shadows.small,
-            ]}
-          >
-            <Ionicons name="moon" size={32} color={textSecondary} />
-          </TouchableOpacity>
+          <ThemeToggleButton />
         </View>
         <ThemedText style={[styles.subtitle, { color: textSecondary }]}>
           <ThemedText style={styles.bold}>{schedules.length}</ThemedText>{" "}
@@ -94,7 +85,7 @@ export function MyMedications() {
         onPress={() => router.push("/new-med-times")}
         activeOpacity={0.85}
       >
-        <Ionicons name="add" size={32} color={buttonPrimaryText} />
+        <Ionicons name="add" size={28} color={buttonPrimaryText} />
       </TouchableOpacity>
     </SafeAreaView>
   );

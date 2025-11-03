@@ -1,10 +1,10 @@
 import { ThemedText } from "@/components/themed-text";
-import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Shadows } from "@/constants/theme";
 import { formatDateHour, formatDateTime } from "@/helpers/formats";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { medicationScheduleBuild } from "@/src/domain/MedicationScheduleBuild";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
 import { styles } from "./my-medications.styles";
@@ -51,7 +51,7 @@ export function MedicationCard({ schedule, onRemove }: MedicationCardProps) {
           style={[styles.trashButton, { backgroundColor: trashButtonBg }]}
           onPress={() => onRemove(id)}
         >
-          <IconSymbol name="trash" size={20} color={errorColor} />
+          <Ionicons name="trash-bin-outline" size={20} color={errorColor} />
         </TouchableOpacity>
       </View>
       {description && (
