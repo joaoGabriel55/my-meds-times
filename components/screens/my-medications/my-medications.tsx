@@ -1,12 +1,14 @@
 import { ThemedText } from "@/components/themed-text";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { Shadows } from "@/constants/theme";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { MedicationScheduleService } from "@/src/domain/MedicationScheduleService";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
 import { container } from "@/src/infrastructure/container";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MedicationCard } from "./medication-card.component";
@@ -21,7 +23,9 @@ export function MyMedications() {
   const [schedules, setSchedules] = useState<MedicationSchedule[]>([]);
   const bg = useThemeColor({}, "background");
   const tint = useThemeColor({}, "tint");
-  const icon = useThemeColor({}, "icon");
+  const buttonPrimaryText = useThemeColor({}, "buttonPrimaryText");
+  const iconButtonBg = useThemeColor({}, "buttonSecondary");
+  const textSecondary = useThemeColor({}, "textSecondary");
 
   useNotifications();
 
@@ -49,19 +53,29 @@ export function MyMedications() {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: bg }]}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={true}
+        bounces={true}
+      >
         <View style={styles.headerRow}>
           <View style={styles.titleContainer}>
-            <IconSymbol name="pills.circle" size={48} color={tint} />
+            <Ionicons name="medkit" size={32} color={textSecondary} />
             <ThemedText type="title" style={styles.titleText}>
               My Medications
             </ThemedText>
           </View>
-          <TouchableOpacity style={styles.iconButton}>
-            <IconSymbol name="moon.circle.fill" size={28} color={icon} />
+          <TouchableOpacity
+            style={[
+              styles.iconButton,
+              { backgroundColor: iconButtonBg },
+              Shadows.small,
+            ]}
+          >
+            <Ionicons name="moon" size={32} color={textSecondary} />
           </TouchableOpacity>
         </View>
-        <ThemedText style={styles.subtitle}>
+        <ThemedText style={[styles.subtitle, { color: textSecondary }]}>
           <ThemedText style={styles.bold}>{schedules.length}</ThemedText>{" "}
           medication scheduled.
         </ThemedText>
@@ -76,11 +90,11 @@ export function MyMedications() {
         </View>
       </ScrollView>
       <TouchableOpacity
-        style={[styles.fab, { backgroundColor: tint }]}
+        style={[styles.fab, { backgroundColor: tint }, Shadows.large]}
         onPress={() => router.push("/new-med-times")}
         activeOpacity={0.85}
       >
-        <IconSymbol name="plus" size={28} color="white" />
+        <Ionicons name="add" size={32} color={buttonPrimaryText} />
       </TouchableOpacity>
     </SafeAreaView>
   );

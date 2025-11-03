@@ -9,6 +9,7 @@ import { InputText } from "@/components/ui/input/input-text";
 import { parseDateToISO } from "@/helpers/formats";
 import { useMedTimesForm } from "@/hooks/med-times/use-med-times-form";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { Shadows } from "@/constants/theme";
 import { MedicationScheduleInput } from "@/src/domain/models/MedicationSchedule";
 import { useRouter } from "expo-router";
 
@@ -23,6 +24,11 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
   const { formState, handleFormChange, errors, validateForm } = useMedTimesForm(
     { values },
   );
+
+  const errorColor = useThemeColor({}, "error");
+  const buttonPrimaryBg = useThemeColor({}, "buttonPrimary");
+  const buttonPrimaryText = useThemeColor({}, "buttonPrimaryText");
+  const tintColor = useThemeColor({}, "tint");
 
   const handleSubmit = () => {
     if (validateForm()) {
@@ -76,17 +82,20 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
             handleFormChange("startDateTime", parseDateToISO(date));
           }}
         />
-        <ThemedText style={{ fontSize: 14, color: "red" }}>
+        <ThemedText style={{ fontSize: 14, color: errorColor }}>
           {errors.startDateTime}
         </ThemedText>
       </View>
-      <View style={{ gap: 16, marginTop: 16 }}>
+      <View style={{ gap: 16 }}>
         <TouchableOpacity
-          style={{
-            backgroundColor: useThemeColor({}, "tint"),
-            padding: 12,
-            borderRadius: 8,
-          }}
+          style={[
+            {
+              backgroundColor: buttonPrimaryBg,
+              padding: 12,
+              borderRadius: 8,
+            },
+            Shadows.small,
+          ]}
           onPress={handleSubmit}
         >
           <ThemedText
@@ -94,19 +103,21 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
               fontSize: 18,
               textAlign: "center",
               fontWeight: "bold",
-              color: "white",
+              color: buttonPrimaryText,
             }}
           >
             Save
           </ThemedText>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{
-            borderColor: useThemeColor({}, "tint"),
-            borderWidth: 1,
-            padding: 12,
-            borderRadius: 8,
-          }}
+          style={[
+            {
+              borderColor: tintColor,
+              borderWidth: 1,
+              padding: 12,
+              borderRadius: 8,
+            },
+          ]}
           onPress={() => {
             router.back();
           }}
@@ -116,7 +127,7 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
               fontSize: 18,
               textAlign: "center",
               fontWeight: "bold",
-              color: useThemeColor({}, "tint"),
+              color: tintColor,
             }}
           >
             Cancel

@@ -1,15 +1,13 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { useMedTimesQuery } from "@/hooks/med-times/use-med-times-query";
 import { useMedTimesUpdate } from "@/hooks/med-times/use-med-times-update";
-import { useThemeColor } from "@/hooks/use-theme-color";
-import { removeMedicationNotifications } from "@/lib/schedule-medication-notifications";
 import { MedicationScheduleInput } from "@/src/domain/models/MedicationSchedule";
 import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { MedicationFormComponent } from "../medication-form/medication-form.component";
+import { MedicationFormContainer } from "../medication-form/medication-form.container";
 
 interface Props {
   id: string;
@@ -38,30 +36,18 @@ export function EditMedTimesForm({ id }: Props) {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: useThemeColor({}, "background"),
-      }}
-    >
-      <ScrollView
-        style={{
-          padding: 28,
-          backgroundColor: useThemeColor({}, "background"),
-        }}
-      >
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="title">Edit Med Times</ThemedText>
-          <ThemedText>Register a schedule for your medication.</ThemedText>
-        </ThemedView>
-        {medicationSchedule && !isLoading && (
-          <MedicationFormComponent
-            values={medicationSchedule}
-            onSubmit={handleUpdate}
-          />
-        )}
-      </ScrollView>
-    </SafeAreaView>
+    <MedicationFormContainer>
+      <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title">Edit Med Times</ThemedText>
+        <ThemedText>Register a schedule for your medication.</ThemedText>
+      </ThemedView>
+      {medicationSchedule && !isLoading && (
+        <MedicationFormComponent
+          values={medicationSchedule}
+          onSubmit={handleUpdate}
+        />
+      )}
+    </MedicationFormContainer>
   );
 }
 

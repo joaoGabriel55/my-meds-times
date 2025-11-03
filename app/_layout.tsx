@@ -36,7 +36,10 @@ export default function RootLayout() {
         <Stack.Screen name="new-med-times" options={{ headerShown: false }} />
         <Stack.Screen name="[id]" options={{ headerShown: false }} />
       </Stack>
-      <StatusBar style="auto" />
+      <StatusBar
+        style={colorScheme === "dark" ? "light" : "dark"}
+        backgroundColor={useThemeColor({}, "background")}
+      />
     </ThemeProvider>
   );
 }
