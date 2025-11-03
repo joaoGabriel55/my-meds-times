@@ -1,0 +1,76 @@
+{
+  "common": {
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "confirm": "Bevestigen",
+    "back": "Terug",
+    "ok": "OK",
+    "yes": "Ja",
+    "no": "Nee"
+  },
+  "myMedications": {
+    "title": "Mijn Medicijnen",
+    "subtitle": "{{count}} medicijn gepland.",
+    "subtitle_plural": "{{count}} medicijnen gepland.",
+    "noMedications": "Nog geen medicijnen gepland",
+    "addButton": "Medicijn Toevoegen"
+  },
+  "medicationCard": {
+    "intervalLabel": "{{hours}}u interval",
+    "daysLabel": "{{days}} dag",
+    "daysLabel_plural": "{{days}} dagen",
+    "scheduledHours": "Geplande Tijden",
+    "startDate": "Startdatum"
+  },
+  "medicationForm": {
+    "newTitle": "Nieuwe Medicijntijd",
+    "newSubtitle": "Registreer een schema voor uw medicijn.",
+    "editTitle": "Medicijntijd Bewerken",
+    "editSubtitle": "Werk uw medicijnschema bij.",
+    "fields": {
+      "medicationName": "Medicijnnaam",
+      "medicationNamePlaceholder": "Voer medicijnnaam in",
+      "description": "Beschrijving",
+      "descriptionPlaceholder": "Voer beschrijving in (optioneel)",
+      "days": "Dagen",
+      "daysPlaceholder": "Aantal dagen",
+      "interval": "Interval",
+      "intervalPlaceholder": "Uren tussen doses",
+      "startDateTime": "Startdatum en -tijd"
+    },
+    "validation": {
+      "nameRequired": "Medicijnnaam is verplicht",
+      "daysRequired": "Aantal dagen is verplicht",
+      "daysMin": "Dagen moet minimaal 1 zijn",
+      "intervalRequired": "Interval is verplicht",
+      "intervalMin": "Interval moet minimaal 1 uur zijn",
+      "startDateRequired": "Startdatum en -tijd zijn verplicht",
+      "startDateFuture": "Startdatum moet in de toekomst zijn"
+    }
+  },
+  "notifications": {
+    "medicationReminder": "Medicijnherinnering",
+    "timeToTake": "Tijd om {{medication}} in te nemen",
+    "permissionTitle": "Meldingen Inschakelen",
+    "permissionMessage": "Schakel meldingen in om medicijnherinneringen te ontvangen.",
+    "permissionDenied": "Meldingsrechten geweigerd"
+  },
+  "settings": {
+    "title": "Instellingen",
+    "language": "Taal",
+    "languageDescription": "Selecteer uw voorkeurstaal",
+    "theme": "Thema",
+    "selectTheme": "Selecteer Thema",
+    "themeLight": "Licht",
+    "themeDark": "Donker",
+    "themeSystem": "Systeem"
+  },
+  "errors": {
+    "generic": "Er is een fout opgetreden. Probeer het opnieuw.",
+    "loadFailed": "Kan medicijnen niet laden",
+    "saveFailed": "Kan medicijn niet opslaan",
+    "deleteFailed": "Kan medicijn niet verwijderen"
+  }
+}

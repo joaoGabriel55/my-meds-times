@@ -6,6 +6,7 @@ import { useMedTimesQuery } from "@/hooks/med-times/use-med-times-query";
 import { useMedTimesUpdate } from "@/hooks/med-times/use-med-times-update";
 import { MedicationScheduleInput } from "@/src/domain/models/MedicationSchedule";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { MedicationFormComponent } from "../medication-form/medication-form.component";
 import { MedicationFormContainer } from "../medication-form/medication-form.container";
 
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export function EditMedTimesForm({ id }: Props) {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const { medicationSchedule, isLoading } = useMedTimesQuery(id);
@@ -38,8 +40,8 @@ export function EditMedTimesForm({ id }: Props) {
   return (
     <MedicationFormContainer>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Edit Med Times</ThemedText>
-        <ThemedText>Register a schedule for your medication.</ThemedText>
+        <ThemedText type="title">{t("medicationForm.editTitle")}</ThemedText>
+        <ThemedText>{t("medicationForm.editSubtitle")}</ThemedText>
       </ThemedView>
       {medicationSchedule && !isLoading && (
         <MedicationFormComponent

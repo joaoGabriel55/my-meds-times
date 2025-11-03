@@ -5,10 +5,12 @@ import { ThemedView } from "@/components/themed-view";
 import { useMedTimesCreate } from "@/hooks/med-times/use-med-times-create";
 import { MedicationScheduleInput } from "@/src/domain/models/MedicationSchedule";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { MedicationFormComponent } from "../medication-form/medication-form.component";
 import { MedicationFormContainer } from "../medication-form/medication-form.container";
 
 export function NewMedTimesForm() {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const { createMedTimes } = useMedTimesCreate();
@@ -26,8 +28,8 @@ export function NewMedTimesForm() {
   return (
     <MedicationFormContainer>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">New Med Times</ThemedText>
-        <ThemedText>Register a schedule for your medication.</ThemedText>
+        <ThemedText type="title">{t("medicationForm.newTitle")}</ThemedText>
+        <ThemedText>{t("medicationForm.newSubtitle")}</ThemedText>
       </ThemedView>
       <MedicationFormComponent onSubmit={handleSave} />
     </MedicationFormContainer>

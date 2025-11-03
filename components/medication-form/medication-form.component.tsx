@@ -12,6 +12,7 @@ import { useThemeColor } from "@/hooks/use-theme-color";
 import { Shadows } from "@/constants/theme";
 import { MedicationScheduleInput } from "@/src/domain/models/MedicationSchedule";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   values?: MedicationScheduleInput;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export function MedicationFormComponent({ values, onSubmit }: Props) {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const { formState, handleFormChange, errors, validateForm } = useMedTimesForm(
@@ -39,26 +41,26 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
   return (
     <ThemedView style={styles.formContainer}>
       <InputText
-        label="Medication Name"
+        label={t("medicationForm.fields.medicationName")}
         value={formState.name}
         lint={errors.name}
         onChange={(text) => handleFormChange("name", text)}
       />
       <InputText
-        label="Description"
+        label={t("medicationForm.fields.description")}
         value={formState.description || ""}
         onChange={(text) => handleFormChange("description", text)}
       />
 
       <InputNumber
-        label="Days"
+        label={t("medicationForm.fields.days")}
         value={formState.days}
         lint={errors.days}
         onChange={(value) => handleFormChange("days", value)}
       />
 
       <InputNumber
-        label="Interval"
+        label={t("medicationForm.fields.interval")}
         value={formState.intervalHours}
         lint={errors.intervalHours}
         onChange={(value) => handleFormChange("intervalHours", value)}
@@ -72,7 +74,7 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
             paddingBottom: 8,
           }}
         >
-          Start Date Time:
+          {t("medicationForm.fields.startDateTime")}:
         </ThemedText>
         <DateTimePicker
           value={formState.startDateTime}
@@ -106,7 +108,7 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
               color: buttonPrimaryText,
             }}
           >
-            Save
+            {t("common.save")}
           </ThemedText>
         </TouchableOpacity>
         <TouchableOpacity
@@ -130,7 +132,7 @@ export function MedicationFormComponent({ values, onSubmit }: Props) {
               color: tintColor,
             }}
           >
-            Cancel
+            {t("common.cancel")}
           </ThemedText>
         </TouchableOpacity>
       </View>

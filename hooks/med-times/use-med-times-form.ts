@@ -3,6 +3,7 @@ import {
   MedicationScheduleInputSchema,
 } from "@/src/domain/models/MedicationSchedule";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type FormErrors = Record<
   keyof Omit<
@@ -26,6 +27,8 @@ export function useMedTimesForm({
 }: {
   values?: MedicationScheduleInput;
 } = {}) {
+  const { t } = useTranslation();
+  
   const [formState, setFormState] = useState<MedicationScheduleInput>(
     values || defaultValues,
   );
@@ -58,7 +61,32 @@ export function useMedTimesForm({
       result.error.errors.forEach((error) => {
         const path = error.path[0] as keyof FormErrors;
         if (path in newErrors) {
-          newErrors[path] = error.message;
+          // Map validation errors to translated messages
+          let translatedMessage = error.message;
+          
+          if (path === 'name' && error.code === 'invalid_type') {
+            translatedMessage = t("medicationForm.validation.nameRequired");
+          } else if (path === 'days') {
+            if (error.code === 'invalid_type') {
+              translatedMessage = t("medicationForm.validation.daysRequired");
+            } else if (error.code === 'too_small') {
+              translatedMessage = t("medicationForm.validation.daysMin");
+            }
+          } else if (path === 'intervalHours') {
+            if (error.code === 'invalid_type') {
+              translatedMessage = t("medicationForm.validation.intervalRequired");
+            } else if (error.code === 'too_small') {
+              translatedMessage = t("medicationForm.validation.intervalMin");
+            }
+          } else if (path === 'startDateTime') {
+            if (error.code === 'invalid_type' || error.code === 'invalid_string') {
+              translatedMessage = t("medicationForm.validation.startDateRequired");
+            } else if (error.code === 'custom') {
+              translatedMessage = t("medicationForm.validation.startDateFuture");
+            }
+          }
+          
+          newErrors[path] = translatedMessage;
         }
       });
 

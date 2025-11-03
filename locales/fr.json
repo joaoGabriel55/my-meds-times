@@ -1,0 +1,76 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "ok": "OK",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "myMedications": {
+    "title": "Mes Médicaments",
+    "subtitle": "{{count}} médicament programmé.",
+    "subtitle_plural": "{{count}} médicaments programmés.",
+    "noMedications": "Aucun médicament programmé pour le moment",
+    "addButton": "Ajouter un Médicament"
+  },
+  "medicationCard": {
+    "intervalLabel": "Intervalle de {{hours}}h",
+    "daysLabel": "{{days}} jour",
+    "daysLabel_plural": "{{days}} jours",
+    "scheduledHours": "Heures Programmées",
+    "startDate": "Date de Début"
+  },
+  "medicationForm": {
+    "newTitle": "Nouveau Rappel de Médicament",
+    "newSubtitle": "Enregistrez un horaire pour votre médicament.",
+    "editTitle": "Modifier le Rappel de Médicament",
+    "editSubtitle": "Mettez à jour l'horaire de votre médicament.",
+    "fields": {
+      "medicationName": "Nom du Médicament",
+      "medicationNamePlaceholder": "Entrez le nom du médicament",
+      "description": "Description",
+      "descriptionPlaceholder": "Entrez la description (facultatif)",
+      "days": "Jours",
+      "daysPlaceholder": "Nombre de jours",
+      "interval": "Intervalle",
+      "intervalPlaceholder": "Heures entre les prises",
+      "startDateTime": "Date et Heure de Début"
+    },
+    "validation": {
+      "nameRequired": "Le nom du médicament est obligatoire",
+      "daysRequired": "Le nombre de jours est obligatoire",
+      "daysMin": "Le nombre de jours doit être d'au moins 1",
+      "intervalRequired": "L'intervalle est obligatoire",
+      "intervalMin": "L'intervalle doit être d'au moins 1 heure",
+      "startDateRequired": "La date et l'heure de début sont obligatoires",
+      "startDateFuture": "La date de début doit être dans le futur"
+    }
+  },
+  "notifications": {
+    "medicationReminder": "Rappel de Médicament",
+    "timeToTake": "Il est temps de prendre {{medication}}",
+    "permissionTitle": "Activer les Notifications",
+    "permissionMessage": "Veuillez activer les notifications pour recevoir des rappels de médicaments.",
+    "permissionDenied": "Autorisations de notification refusées"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "languageDescription": "Sélectionnez votre langue préférée",
+    "theme": "Thème",
+    "selectTheme": "Sélectionner le Thème",
+    "themeLight": "Clair",
+    "themeDark": "Sombre",
+    "themeSystem": "Système"
+  },
+  "errors": {
+    "generic": "Une erreur s'est produite. Veuillez réessayer.",
+    "loadFailed": "Échec du chargement des médicaments",
+    "saveFailed": "Échec de l'enregistrement du médicament",
+    "deleteFailed": "Échec de la suppression du médicament"
+  }
+}

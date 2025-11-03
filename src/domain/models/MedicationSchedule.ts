@@ -1,18 +1,19 @@
+import i18n from "@/lib/i18n";
 import { z } from "zod";
 
 export const MedicationScheduleSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z.string().min(1),
   description: z.string().optional(),
-  intervalHours: z.number(),
+  intervalHours: z.number().min(1),
   startDateTime: z
     .string()
     .datetime()
     .refine((value) => {
       const date = new Date(value);
       return date.getTime() > Date.now();
-    }, "Start date must be in the future"),
-  days: z.number(),
+    }, i18n.t("medicationForm.validation.startDateFuture")),
+  days: z.number().min(1),
   createdAt: z.string(),
   updatedAt: z.string().optional(),
 });

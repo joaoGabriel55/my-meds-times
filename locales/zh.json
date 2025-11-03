@@ -1,0 +1,76 @@
+{
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "confirm": "确认",
+    "back": "返回",
+    "ok": "确定",
+    "yes": "是",
+    "no": "否"
+  },
+  "myMedications": {
+    "title": "我的药物",
+    "subtitle": "已安排{{count}}种药物。",
+    "subtitle_plural": "已安排{{count}}种药物。",
+    "noMedications": "尚未安排任何药物",
+    "addButton": "添加药物"
+  },
+  "medicationCard": {
+    "intervalLabel": "{{hours}}小时间隔",
+    "daysLabel": "{{days}}天",
+    "daysLabel_plural": "{{days}}天",
+    "scheduledHours": "预定时间",
+    "startDate": "开始日期"
+  },
+  "medicationForm": {
+    "newTitle": "新建用药时间",
+    "newSubtitle": "为您的药物注册时间表。",
+    "editTitle": "编辑用药时间",
+    "editSubtitle": "更新您的药物时间表。",
+    "fields": {
+      "medicationName": "药物名称",
+      "medicationNamePlaceholder": "输入药物名称",
+      "description": "描述",
+      "descriptionPlaceholder": "输入描述（可选）",
+      "days": "天数",
+      "daysPlaceholder": "天数",
+      "interval": "间隔",
+      "intervalPlaceholder": "服药间隔（小时）",
+      "startDateTime": "开始日期和时间"
+    },
+    "validation": {
+      "nameRequired": "药物名称为必填项",
+      "daysRequired": "天数为必填项",
+      "daysMin": "天数必须至少为1",
+      "intervalRequired": "间隔为必填项",
+      "intervalMin": "间隔必须至少为1小时",
+      "startDateRequired": "开始日期和时间为必填项",
+      "startDateFuture": "开始日期必须是未来时间"
+    }
+  },
+  "notifications": {
+    "medicationReminder": "用药提醒",
+    "timeToTake": "该服用{{medication}}了",
+    "permissionTitle": "启用通知",
+    "permissionMessage": "请启用通知以接收用药提醒。",
+    "permissionDenied": "通知权限被拒绝"
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "languageDescription": "选择您的首选语言",
+    "theme": "主题",
+    "selectTheme": "选择主题",
+    "themeLight": "浅色",
+    "themeDark": "深色",
+    "themeSystem": "系统"
+  },
+  "errors": {
+    "generic": "发生错误。请重试。",
+    "loadFailed": "加载药物失败",
+    "saveFailed": "保存药物失败",
+    "deleteFailed": "删除药物失败"
+  }
+}

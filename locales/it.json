@@ -1,0 +1,76 @@
+{
+  "common": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "confirm": "Conferma",
+    "back": "Indietro",
+    "ok": "OK",
+    "yes": "Sì",
+    "no": "No"
+  },
+  "myMedications": {
+    "title": "I Miei Farmaci",
+    "subtitle": "{{count}} farmaco programmato.",
+    "subtitle_plural": "{{count}} farmaci programmati.",
+    "noMedications": "Nessun farmaco programmato ancora",
+    "addButton": "Aggiungi Farmaco"
+  },
+  "medicationCard": {
+    "intervalLabel": "Intervallo di {{hours}}h",
+    "daysLabel": "{{days}} giorno",
+    "daysLabel_plural": "{{days}} giorni",
+    "scheduledHours": "Orari Programmati",
+    "startDate": "Data di Inizio"
+  },
+  "medicationForm": {
+    "newTitle": "Nuovo Orario Farmaco",
+    "newSubtitle": "Registra un orario per il tuo farmaco.",
+    "editTitle": "Modifica Orario Farmaco",
+    "editSubtitle": "Aggiorna l'orario del tuo farmaco.",
+    "fields": {
+      "medicationName": "Nome del Farmaco",
+      "medicationNamePlaceholder": "Inserisci il nome del farmaco",
+      "description": "Descrizione",
+      "descriptionPlaceholder": "Inserisci la descrizione (facoltativo)",
+      "days": "Giorni",
+      "daysPlaceholder": "Numero di giorni",
+      "interval": "Intervallo",
+      "intervalPlaceholder": "Ore tra le dosi",
+      "startDateTime": "Data e Ora di Inizio"
+    },
+    "validation": {
+      "nameRequired": "Il nome del farmaco è obbligatorio",
+      "daysRequired": "Il numero di giorni è obbligatorio",
+      "daysMin": "I giorni devono essere almeno 1",
+      "intervalRequired": "L'intervallo è obbligatorio",
+      "intervalMin": "L'intervallo deve essere almeno 1 ora",
+      "startDateRequired": "La data e l'ora di inizio sono obbligatorie",
+      "startDateFuture": "La data di inizio deve essere nel futuro"
+    }
+  },
+  "notifications": {
+    "medicationReminder": "Promemoria Farmaco",
+    "timeToTake": "È ora di prendere {{medication}}",
+    "permissionTitle": "Abilita Notifiche",
+    "permissionMessage": "Si prega di abilitare le notifiche per ricevere promemoria sui farmaci.",
+    "permissionDenied": "Permessi di notifica negati"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "language": "Lingua",
+    "languageDescription": "Seleziona la tua lingua preferita",
+    "theme": "Tema",
+    "selectTheme": "Seleziona Tema",
+    "themeLight": "Chiaro",
+    "themeDark": "Scuro",
+    "themeSystem": "Sistema"
+  },
+  "errors": {
+    "generic": "Si è verificato un errore. Riprova.",
+    "loadFailed": "Impossibile caricare i farmaci",
+    "saveFailed": "Impossibile salvare il farmaco",
+    "deleteFailed": "Impossibile eliminare il farmaco"
+  }
+}

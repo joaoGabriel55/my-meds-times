@@ -1,0 +1,76 @@
+{
+  "common": {
+    "save": "שמור",
+    "cancel": "ביטול",
+    "delete": "מחק",
+    "edit": "ערוך",
+    "confirm": "אשר",
+    "back": "חזור",
+    "ok": "אישור",
+    "yes": "כן",
+    "no": "לא"
+  },
+  "myMedications": {
+    "title": "התרופות שלי",
+    "subtitle": "תרופה {{count}} מתוזמנת.",
+    "subtitle_plural": "{{count}} תרופות מתוזמנות.",
+    "noMedications": "עדיין לא מתוזמנות תרופות",
+    "addButton": "הוסף תרופה"
+  },
+  "medicationCard": {
+    "intervalLabel": "מרווח {{hours}} שעות",
+    "daysLabel": "יום {{days}}",
+    "daysLabel_plural": "{{days}} ימים",
+    "scheduledHours": "שעות מתוזמנות",
+    "startDate": "תאריך התחלה"
+  },
+  "medicationForm": {
+    "newTitle": "לוח זמנים חדש",
+    "newSubtitle": "רשום לוח זמנים לתרופה שלך.",
+    "editTitle": "ערוך לוח זמנים",
+    "editSubtitle": "עדכן את לוח הזמנים לתרופה שלך.",
+    "fields": {
+      "medicationName": "שם התרופה",
+      "medicationNamePlaceholder": "הזן שם תרופה",
+      "description": "תיאור",
+      "descriptionPlaceholder": "הזן תיאור (אופציונלי)",
+      "days": "ימים",
+      "daysPlaceholder": "מספר ימים",
+      "interval": "מרווח",
+      "intervalPlaceholder": "שעות בין מנות",
+      "startDateTime": "תאריך ושעת התחלה"
+    },
+    "validation": {
+      "nameRequired": "שם התרופה נדרש",
+      "daysRequired": "מספר הימים נדרש",
+      "daysMin": "מספר הימים חייב להיות לפחות 1",
+      "intervalRequired": "מרווח נדרש",
+      "intervalMin": "המרווח חייב להיות לפחות שעה אחת",
+      "startDateRequired": "תאריך ושעת התחלה נדרשים",
+      "startDateFuture": "תאריך ההתחלה חייב להיות בעתיד"
+    }
+  },
+  "notifications": {
+    "medicationReminder": "תזכורת לתרופה",
+    "timeToTake": "זמן ליטול {{medication}}",
+    "permissionTitle": "הפעל התראות",
+    "permissionMessage": "אנא הפעל התראות כדי לקבל תזכורות לתרופות.",
+    "permissionDenied": "הרשאות התראות נדחו"
+  },
+  "settings": {
+    "title": "הגדרות",
+    "language": "שפה",
+    "languageDescription": "בחר את השפה המועדפת עליך",
+    "theme": "ערכת נושא",
+    "selectTheme": "בחר ערכת נושא",
+    "themeLight": "בהיר",
+    "themeDark": "כהה",
+    "themeSystem": "מערכת"
+  },
+  "errors": {
+    "generic": "אירעה שגיאה. אנא נסה שוב.",
+    "loadFailed": "טעינת התרופות נכשלה",
+    "saveFailed": "שמירת התרופה נכשלה",
+    "deleteFailed": "מחיקת התרופה נכשלה"
+  }
+}

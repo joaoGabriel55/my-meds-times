@@ -1,0 +1,76 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "confirm": "Confirmar",
+    "back": "Volver",
+    "ok": "OK",
+    "yes": "Sí",
+    "no": "No"
+  },
+  "myMedications": {
+    "title": "Mis Medicamentos",
+    "subtitle": "{{count}} medicamento programado.",
+    "subtitle_plural": "{{count}} medicamentos programados.",
+    "noMedications": "No hay medicamentos programados aún",
+    "addButton": "Agregar Medicamento"
+  },
+  "medicationCard": {
+    "intervalLabel": "Intervalo de {{hours}}h",
+    "daysLabel": "{{days}} día",
+    "daysLabel_plural": "{{days}} días",
+    "scheduledHours": "Horarios Programados",
+    "startDate": "Fecha de Inicio"
+  },
+  "medicationForm": {
+    "newTitle": "Nuevo Horario de Medicamento",
+    "newSubtitle": "Registra un horario para tu medicamento.",
+    "editTitle": "Editar Horario de Medicamento",
+    "editSubtitle": "Actualiza el horario de tu medicamento.",
+    "fields": {
+      "medicationName": "Nombre del Medicamento",
+      "medicationNamePlaceholder": "Ingresa el nombre del medicamento",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Ingresa la descripción (opcional)",
+      "days": "Días",
+      "daysPlaceholder": "Número de días",
+      "interval": "Intervalo",
+      "intervalPlaceholder": "Horas entre dosis",
+      "startDateTime": "Fecha y Hora de Inicio"
+    },
+    "validation": {
+      "nameRequired": "El nombre del medicamento es obligatorio",
+      "daysRequired": "El número de días es obligatorio",
+      "daysMin": "Los días deben ser al menos 1",
+      "intervalRequired": "El intervalo es obligatorio",
+      "intervalMin": "El intervalo debe ser al menos 1 hora",
+      "startDateRequired": "La fecha y hora de inicio son obligatorias",
+      "startDateFuture": "La fecha de inicio debe ser en el futuro"
+    }
+  },
+  "notifications": {
+    "medicationReminder": "Recordatorio de Medicamento",
+    "timeToTake": "Hora de tomar {{medication}}",
+    "permissionTitle": "Activar Notificaciones",
+    "permissionMessage": "Por favor, activa las notificaciones para recibir recordatorios de medicamentos.",
+    "permissionDenied": "Permiso de notificaciones denegado"
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": "Idioma",
+    "languageDescription": "Selecciona tu idioma preferido",
+    "theme": "Tema",
+    "selectTheme": "Seleccionar Tema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeSystem": "Sistema"
+  },
+  "errors": {
+    "generic": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+    "loadFailed": "Error al cargar medicamentos",
+    "saveFailed": "Error al guardar medicamento",
+    "deleteFailed": "Error al eliminar medicamento"
+  }
+}

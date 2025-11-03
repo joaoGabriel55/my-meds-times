@@ -1,5 +1,4 @@
 import { ThemedText } from "@/components/themed-text";
-import { ThemeToggleButton } from "@/components/ui/theme-toggle-button";
 import { Shadows } from "@/constants/theme";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -9,6 +8,7 @@ import { container } from "@/src/infrastructure/container";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MedicationCard } from "./medication-card.component";
@@ -19,6 +19,7 @@ const medicationScheduleRepository = MedicationScheduleRepository();
 const service = MedicationScheduleService(medicationScheduleRepository);
 
 export function MyMedications() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [schedules, setSchedules] = useState<MedicationSchedule[]>([]);
   const bg = useThemeColor({}, "background");
@@ -61,14 +62,15 @@ export function MyMedications() {
           <View style={styles.titleContainer}>
             <Ionicons name="medkit" size={28} color={textSecondary} />
             <ThemedText type="title" style={styles.titleText}>
-              My Medications
+              {t("myMedications.title")}
             </ThemedText>
           </View>
-          <ThemeToggleButton />
+          <TouchableOpacity onPress={() => router.push("/settings")}>
+            <Ionicons name="settings" size={28} color={textSecondary} />
+          </TouchableOpacity>
         </View>
         <ThemedText style={[styles.subtitle, { color: textSecondary }]}>
-          <ThemedText style={styles.bold}>{schedules.length}</ThemedText>{" "}
-          medication scheduled.
+          {t("myMedications.subtitle", { count: schedules.length })}
         </ThemedText>
         <View style={styles.cardList}>
           {schedules.map((schedule) => (

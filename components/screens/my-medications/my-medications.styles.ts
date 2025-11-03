@@ -51,11 +51,9 @@ export const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 18,
     fontWeight: "600",
-    marginBottom: 4,
   },
   cardDesc: {
     fontSize: 14,
-    marginBottom: 8,
   },
   cardDetails: {
     flexDirection: "row",
@@ -70,8 +68,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   trashButton: {
-    alignSelf: "flex-end",
-    marginTop: 2,
+    alignSelf: "flex-start",
     padding: 6,
     borderRadius: 8,
   },
