@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components/themed-text";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { useNotifications } from "@/hooks/use-notifications";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { MedicationScheduleService } from "@/src/domain/MedicationScheduleService";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
@@ -21,6 +22,8 @@ export function MyMedications() {
   const bg = useThemeColor({}, "background");
   const tint = useThemeColor({}, "tint");
   const icon = useThemeColor({}, "icon");
+
+  useNotifications();
 
   useEffect(() => {
     const loadMedicationSchedules = async () => {

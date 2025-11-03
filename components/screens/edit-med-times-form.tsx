@@ -5,6 +5,7 @@ import { ThemedView } from "@/components/themed-view";
 import { useMedTimesQuery } from "@/hooks/med-times/use-med-times-query";
 import { useMedTimesUpdate } from "@/hooks/med-times/use-med-times-update";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { removeMedicationNotifications } from "@/lib/schedule-medication-notifications";
 import { MedicationScheduleInput } from "@/src/domain/models/MedicationSchedule";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -21,8 +22,14 @@ export function EditMedTimesForm({ id }: Props) {
   const { updateMedTimes } = useMedTimesUpdate(id);
 
   const handleUpdate = async (formState: MedicationScheduleInput) => {
+    if (!medicationSchedule) return;
+
     try {
-      await updateMedTimes(formState);
+      await updateMedTimes({
+        id,
+        createdAt: medicationSchedule.createdAt,
+        ...formState,
+      });
 
       router.push("/");
     } catch (error) {
