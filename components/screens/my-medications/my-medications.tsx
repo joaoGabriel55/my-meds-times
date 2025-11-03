@@ -13,6 +13,7 @@ import { ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MedicationCard } from "./medication-card.component";
 import { styles } from "./my-medications.styles";
+import { removeMedicationNotifications } from "@/lib/schedule-medication-notifications";
 
 const { MedicationScheduleRepository } = container;
 const medicationScheduleRepository = MedicationScheduleRepository();
@@ -34,6 +35,11 @@ export function MyMedications() {
       try {
         const schedules = await service.findAll();
 
+        schedules.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
+
         setSchedules(schedules);
       } catch (error) {
         console.error("Error loading medication schedule:", error);
@@ -44,8 +50,15 @@ export function MyMedications() {
 
   const handleRemoveSchedule = async (id: string) => {
     try {
+      const schedule = await service.findById(id);
+
+      if (!schedule) return;
+
       await service.delete(id);
+
       setSchedules(schedules.filter((schedule) => schedule.id !== id));
+
+      await removeMedicationNotifications(schedule);
     } catch (error) {
       console.error("Error removing medication schedule:", error);
     }

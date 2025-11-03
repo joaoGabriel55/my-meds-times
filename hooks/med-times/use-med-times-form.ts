@@ -25,10 +25,10 @@ const defaultValues = {
 export function useMedTimesForm({
   values,
 }: {
-  values?: MedicationScheduleInput;
+  values?: MedicationScheduleInput & { id?: string };
 } = {}) {
   const { t } = useTranslation();
-  
+
   const [formState, setFormState] = useState<MedicationScheduleInput>(
     values || defaultValues,
   );
@@ -63,29 +63,39 @@ export function useMedTimesForm({
         if (path in newErrors) {
           // Map validation errors to translated messages
           let translatedMessage = error.message;
-          
-          if (path === 'name' && error.code === 'invalid_type') {
+
+          if (path === "name" && error.code === "invalid_type") {
             translatedMessage = t("medicationForm.validation.nameRequired");
-          } else if (path === 'days') {
-            if (error.code === 'invalid_type') {
+          } else if (path === "days") {
+            if (error.code === "invalid_type") {
               translatedMessage = t("medicationForm.validation.daysRequired");
-            } else if (error.code === 'too_small') {
+            } else if (error.code === "too_small") {
               translatedMessage = t("medicationForm.validation.daysMin");
             }
-          } else if (path === 'intervalHours') {
-            if (error.code === 'invalid_type') {
-              translatedMessage = t("medicationForm.validation.intervalRequired");
-            } else if (error.code === 'too_small') {
+          } else if (path === "intervalHours") {
+            if (error.code === "invalid_type") {
+              translatedMessage = t(
+                "medicationForm.validation.intervalRequired",
+              );
+            } else if (error.code === "too_small") {
               translatedMessage = t("medicationForm.validation.intervalMin");
             }
-          } else if (path === 'startDateTime') {
-            if (error.code === 'invalid_type' || error.code === 'invalid_string') {
-              translatedMessage = t("medicationForm.validation.startDateRequired");
-            } else if (error.code === 'custom') {
-              translatedMessage = t("medicationForm.validation.startDateFuture");
+          } else if (path === "startDateTime") {
+            if (
+              (error.code === "invalid_type" ||
+                error.code === "invalid_string") &&
+              !values?.id
+            ) {
+              translatedMessage = t(
+                "medicationForm.validation.startDateRequired",
+              );
+            } else if (error.code === "custom" && !values?.id) {
+              translatedMessage = t(
+                "medicationForm.validation.startDateFuture",
+              );
             }
           }
-          
+
           newErrors[path] = translatedMessage;
         }
       });

@@ -29,6 +29,15 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Install on local device
+
+### Android
+
+```
+eas build --platform android --profile preview --local
+adb install <apk-path>
+```
+
 ## Internationalization (i18n) 🌍
 
 The app supports 12 languages with independent language selection (users can change the app language without changing device settings), including full RTL (Right-to-Left) support for Arabic.

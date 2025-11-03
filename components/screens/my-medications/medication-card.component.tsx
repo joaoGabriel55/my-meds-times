@@ -69,7 +69,7 @@ export function MedicationCard({ schedule, onRemove }: MedicationCardProps) {
         <ThemedText
           style={[
             styles.cardDetail,
-            { backgroundColor: tint, color: buttonPrimaryText },
+            { backgroundColor: tint, color: buttonPrimaryText, height: 28 },
           ]}
         >
           {t("medicationCard.intervalLabel", { hours: intervalHours })}
@@ -77,7 +77,7 @@ export function MedicationCard({ schedule, onRemove }: MedicationCardProps) {
         <ThemedText
           style={[
             styles.cardDetail,
-            { backgroundColor: tint, color: buttonPrimaryText },
+            { backgroundColor: tint, color: buttonPrimaryText, height: 28 },
           ]}
         >
           {t("medicationCard.daysLabel", { count: days, days })}
@@ -85,7 +85,7 @@ export function MedicationCard({ schedule, onRemove }: MedicationCardProps) {
         <ThemedText
           style={[
             styles.cardDetail,
-            { backgroundColor: tint, color: buttonPrimaryText },
+            { backgroundColor: tint, color: buttonPrimaryText, height: 28 },
           ]}
         >
           {formatDateTime(startDateTime)}
