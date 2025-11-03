@@ -1,4 +1,5 @@
 import {
+  createMedicationScheduleUpdateSchema,
   MedicationScheduleInput,
   MedicationScheduleInputSchema,
 } from "@/src/domain/models/MedicationSchedule";
@@ -48,7 +49,17 @@ export function useMedTimesForm({
   }
 
   function validateForm() {
-    const result = MedicationScheduleInputSchema.safeParse(formState);
+    let result;
+
+    if (values?.id) {
+      const updateSchema = createMedicationScheduleUpdateSchema(
+        values?.startDateTime,
+      );
+
+      result = updateSchema.safeParse(formState);
+    } else {
+      result = MedicationScheduleInputSchema.safeParse(formState);
+    }
 
     if (!result.success) {
       const newErrors: FormErrors = {
