@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "my-meds-times",
+    "name": "My Meds Times",
     "slug": "my-meds-times",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,18 +10,13 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.alamedapps.my-meds-times",
+      "bundleIdentifier": "com.alamedapps.mymedstimes",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#B48BEE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
-      },
+      "adaptiveIcon": "./assets/images/adaptive-icon.png",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.alamedapps.mymedstimes"
@@ -51,7 +46,10 @@
       "reactCompiler": true
     },
     "extra": {
-      "router": {}
+      "router": {},
+      "eas": {
+        "projectId": "7ed3c75b-8897-4b96-b91d-c9c1ceb8b835"
+      }
     },
     "owner": "quaresma55"
   }
