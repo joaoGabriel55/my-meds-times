@@ -3,6 +3,16 @@ import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import { useEffect } from "react";
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+    priority: Notifications.AndroidNotificationPriority.HIGH,
+  }),
+});
+
 export function useNotifications() {
   useEffect(() => {
     registerForPushNotificationsAsync();
