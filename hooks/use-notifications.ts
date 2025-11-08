@@ -10,6 +10,7 @@ Notifications.setNotificationHandler({
     shouldShowBanner: true,
     shouldShowList: true,
     priority: Notifications.AndroidNotificationPriority.HIGH,
+    shouldShowAlert: true,
   }),
 });
 

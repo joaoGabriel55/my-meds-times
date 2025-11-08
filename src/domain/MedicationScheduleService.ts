@@ -1,18 +1,12 @@
-import { formatDateTime, parseDateToISO } from "@/helpers/formats";
+import { parseDateToISO } from "@/helpers/formats";
 import { MedicationScheduleRepositoryPort } from "@/src/application/ports/MedicationScheduleRepositoryPort";
 import { MedicationScheduleServicePort } from "@/src/application/ports/MedicationScheduleServicePort";
 import {
   MedicationSchedule,
   MedicationScheduleInput,
 } from "@/src/domain/models/MedicationSchedule";
-import { compareAsc, formatDate } from "date-fns";
-
-function generateId() {
-  return (
-    Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15)
-  );
-}
+import { generateId } from "@/src/shared/Id";
+import { compareAsc } from "date-fns";
 
 export function MedicationScheduleService(
   repository: MedicationScheduleRepositoryPort,
