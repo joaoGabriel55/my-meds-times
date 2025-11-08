@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/themed-text";
 import { Shadows } from "@/constants/theme";
-import { useNotifications } from "@/hooks/use-notifications";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { removeMedicationNotifications } from "@/lib/schedule-medication-notifications";
 import { MedicationScheduleService } from "@/src/domain/MedicationScheduleService";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
 import { container } from "@/src/infrastructure/container";
@@ -13,7 +13,7 @@ import { ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MedicationCard } from "./medication-card.component";
 import { styles } from "./my-medications.styles";
-import { removeMedicationNotifications } from "@/lib/schedule-medication-notifications";
+import { BannerAd } from "@/components/ui/banner-ad";
 
 const { MedicationScheduleRepository } = container;
 const medicationScheduleRepository = MedicationScheduleRepository();
@@ -27,8 +27,6 @@ export function MyMedications() {
   const tint = useThemeColor({}, "tint");
   const textSecondary = useThemeColor({}, "textSecondary");
   const buttonPrimaryText = useThemeColor({}, "buttonPrimaryText");
-
-  useNotifications();
 
   useEffect(() => {
     const loadMedicationSchedules = async () => {
@@ -102,6 +100,7 @@ export function MyMedications() {
       >
         <Ionicons name="add" size={28} color={buttonPrimaryText} />
       </TouchableOpacity>
+      <BannerAd />
     </SafeAreaView>
   );
 }

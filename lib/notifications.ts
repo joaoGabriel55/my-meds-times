@@ -33,7 +33,13 @@ async function registerForPushNotificationsAsync() {
     await Notifications.setNotificationChannelAsync("myNotificationChannel", {
       name: "A channel is needed for the permissions prompt to appear",
       importance: Notifications.AndroidImportance.MAX,
+      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
+      audioAttributes: {
+        contentType: Notifications.AndroidAudioContentType.SONIFICATION,
+        usage: Notifications.AndroidAudioUsage.ALARM,
+      },
       vibrationPattern: [0, 250, 250, 250],
+      enableVibrate: true,
       lightColor: "#FF231F7C",
     });
   }
