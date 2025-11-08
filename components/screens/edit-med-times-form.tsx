@@ -4,10 +4,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { useMedTimesQuery } from "@/hooks/med-times/use-med-times-query";
 import { useMedTimesUpdate } from "@/hooks/med-times/use-med-times-update";
-import {
-  MedicationScheduleInput,
-  createMedicationScheduleUpdateSchema,
-} from "@/src/domain/models/MedicationSchedule";
+import { MedicationScheduleInput } from "@/src/domain/models/MedicationSchedule";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { MedicationFormComponent } from "../medication-form/medication-form.component";

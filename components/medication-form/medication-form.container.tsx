@@ -1,6 +1,7 @@
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { BannerAd } from "../ui/banner-ad";
 
 export function MedicationFormContainer({
   children,
@@ -31,6 +32,7 @@ export function MedicationFormContainer({
       >
         {children}
       </ScrollView>
+      <BannerAd />
     </SafeAreaView>
   );
 }

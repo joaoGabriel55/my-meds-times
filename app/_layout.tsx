@@ -7,21 +7,12 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
-import { useThemeColor } from "@/hooks/use-theme-color";
-import { ThemeProvider } from "@/contexts/theme-context";
 import { LanguageProvider } from "@/contexts/language-context";
+import { ThemeProvider } from "@/contexts/theme-context";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import * as Notifications from "expo-notifications";
+import { useNotifications } from "@/hooks/use-notifications";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import "@/lib/i18n";
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
 
 export default function RootLayout() {
   return (
@@ -35,6 +26,7 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  useNotifications();
 
   return (
     <NavigationThemeProvider
