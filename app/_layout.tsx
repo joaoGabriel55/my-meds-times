@@ -5,6 +5,7 @@ import {
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import mobileAds from "react-native-google-mobile-ads";
 import "react-native-reanimated";
 
 import { LanguageProvider } from "@/contexts/language-context";
@@ -13,6 +14,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import "@/lib/i18n";
+import { useEffect } from "react";
 
 export default function RootLayout() {
   return (
@@ -27,6 +29,14 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   useNotifications();
+
+  useEffect(() => {
+    mobileAds()
+      .initialize()
+      .then(() => {
+        console.log("AdMob initialized");
+      });
+  }, []);
 
   return (
     <NavigationThemeProvider

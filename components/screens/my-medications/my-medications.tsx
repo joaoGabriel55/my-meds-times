@@ -1,4 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
+import { BannerAd } from "@/components/ui/banner-ad";
 import { Shadows } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { removeMedicationNotifications } from "@/lib/schedule-medication-notifications";
@@ -13,7 +14,6 @@ import { ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MedicationCard } from "./medication-card.component";
 import { styles } from "./my-medications.styles";
-import { BannerAd } from "@/components/ui/banner-ad";
 
 const { MedicationScheduleRepository } = container;
 const medicationScheduleRepository = MedicationScheduleRepository();

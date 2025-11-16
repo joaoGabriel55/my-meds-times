@@ -50,6 +50,23 @@
         {
           "androidAppId": "ca-app-pub-9821555230393214~6196912721"
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#ffffff",
+          "sounds": ["./assets/alarm.wav"]
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraMavenRepos": [
+              "../node_modules/@notifee/react-native/android/libs"
+            ]
+          }
+        }
       ]
     ],
     "experiments": {

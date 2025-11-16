@@ -38,6 +38,15 @@ eas build --platform android --profile preview --local
 adb install <apk-path>
 ```
 
+### Release
+
+```
+cd android
+./gradlew assembleRelease
+
+adb install android/app/build/outputs/apk/release/app-release.apk
+```
+
 ## Features
 
 - 💊 **Medication Scheduling** - Set custom schedules for your medications

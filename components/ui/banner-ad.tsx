@@ -6,7 +6,7 @@ import {
 
 const adUnitId = __DEV__
   ? TestIds.ADAPTIVE_BANNER
-  : process.env.BANNER_UNIT_ID!;
+  : 'ca-app-pub-9821555230393214/6792852675';
 
 export function BannerAd() {
   return (
