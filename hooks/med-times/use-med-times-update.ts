@@ -1,7 +1,7 @@
 import {
-    removeMedicationNotifications,
-    scheduleMedicationNotifications,
-} from "@/lib/schedule-medication-notifications";
+  removeMedicationAlarms,
+  scheduleMedicationAlarms,
+} from "@/lib/schedule-medication-alarms";
 import { MedicationScheduleService } from "@/src/domain/MedicationScheduleService";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
 import { container } from "@/src/infrastructure/container";
@@ -28,8 +28,8 @@ export function useMedTimesUpdate(id: string) {
         medicationSchedule &&
         medicationSchedule.startDateTime !== formState.startDateTime
       ) {
-        await removeMedicationNotifications(medicationSchedule);
-        await scheduleMedicationNotifications(formState);
+        await removeMedicationAlarms(medicationSchedule);
+        await scheduleMedicationAlarms(formState);
       }
     } catch (error) {
       console.error(error);

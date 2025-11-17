@@ -2,13 +2,8 @@ import Alarm from "@/lib/native/alarm-module";
 import { medicationScheduleBuild } from "@/src/domain/MedicationScheduleBuild";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
 import { format } from "date-fns/format";
-import { SchedulableTriggerInputTypes } from "expo-notifications";
-import {
-  cancelPushNotification,
-  schedulePushNotification,
-} from "./notifications";
 
-export async function scheduleMedicationNotifications(
+export async function scheduleMedicationAlarms(
   medicationSchedule: MedicationSchedule,
 ): Promise<void> {
   const scheduledTimes = medicationScheduleBuild({
@@ -27,26 +22,11 @@ export async function scheduleMedicationNotifications(
     }),
   );
 
-  const notificationPromises = scheduledTimes.map((scheduledTime) =>
-    schedulePushNotification({
-      identifier: `medication-${medicationSchedule.id}-${scheduledTime.getTime()}`,
-      content: {
-        title: medicationSchedule.name,
-        body: medicationSchedule.description ?? "Time to take your medication",
-      },
-      trigger: {
-        type: SchedulableTriggerInputTypes.DATE,
-        date: scheduledTime,
-      },
-    }),
-  );
-
-  await Promise.all(notificationPromises);
   await Promise.all(alarmPromises);
   console.log("Medication notifications scheduled successfully");
 }
 
-export async function removeMedicationNotifications(
+export async function removeMedicationAlarms(
   medicationSchedule: MedicationSchedule,
 ): Promise<void> {
   const scheduledTimes = medicationScheduleBuild({
@@ -61,13 +41,6 @@ export async function removeMedicationNotifications(
     ),
   );
 
-  const notificationPromises = scheduledTimes.map((scheduledTime) =>
-    cancelPushNotification(
-      `medication-${medicationSchedule.id}-${scheduledTime.getTime()}`,
-    ),
-  );
-
-  await Promise.all(notificationPromises);
   await Promise.all(alarmPromises);
   console.log("Medication notifications removed successfully");
 }

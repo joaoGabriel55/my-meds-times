@@ -11,7 +11,7 @@ import "react-native-reanimated";
 import { LanguageProvider } from "@/contexts/language-context";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { useNotifications } from "@/hooks/use-notifications";
+import { useDeviceAlarm } from "@/hooks/use-device-alarm";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import "@/lib/i18n";
 import { useEffect } from "react";
@@ -28,7 +28,7 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  useNotifications();
+  useDeviceAlarm();
 
   useEffect(() => {
     mobileAds()

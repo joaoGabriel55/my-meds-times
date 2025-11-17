@@ -1,13 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
   <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+  <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-  <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-  <uses-permission android:name="android.permission.SET_ALARM" />
+  <uses-permission android:name="android.permission.WAKE_LOCK"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
   <queries>
     <intent>
@@ -38,12 +40,21 @@
         <data android:scheme="exp+my-meds-times"/>
       </intent-filter>
     </activity>
-    <receiver
-        android:name=".AlarmReceiver"
-        android:exported="true" />
-    <service
-        android:name=".AlarmService"
+    <receiver android:name="com.alamedapps.mymedstimes.AlarmReceiver" android:exported="true">
+        <intent-filter>
+            <action android:name="com.alamedapps.mymedstimes.ACTION_STOP_ALARM" />
+            <action android:name="com.alamedapps.mymedstimes.ACTION_SNOOZE_ALARM" />
+        </intent-filter>
+    </receiver>
+    <receiver android:enabled="true" android:exported="true" android:name="com.alamedapps.mymedstimes.BootReceiver">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+      </intent-filter>
+    </receiver>
+    <!--<service
+        android:name="com.alamedapps.mymedstimes.AlarmService"
         android:exported="false"
-        android:foregroundServiceType="mediaPlayback" />
+        android:foregroundServiceType="mediaPlayback"
+        tools:targetApi="34" />-->
   </application>
 </manifest>

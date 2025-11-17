@@ -1,4 +1,4 @@
-import { scheduleMedicationNotifications } from "@/lib/schedule-medication-notifications";
+import { scheduleMedicationAlarms } from "@/lib/schedule-medication-alarms";
 import { MedicationScheduleService } from "@/src/domain/MedicationScheduleService";
 import { MedicationScheduleInput } from "@/src/domain/models/MedicationSchedule";
 import { container } from "@/src/infrastructure/container";
@@ -18,7 +18,7 @@ export function useMedTimesCreate() {
 
       const createdMedicationSchedule = await service.create(formState);
 
-      await scheduleMedicationNotifications(createdMedicationSchedule);
+      await scheduleMedicationAlarms(createdMedicationSchedule);
     } catch (error) {
       console.error(error);
     } finally {
