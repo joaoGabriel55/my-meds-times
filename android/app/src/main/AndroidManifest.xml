@@ -40,12 +40,9 @@
         <data android:scheme="exp+my-meds-times"/>
       </intent-filter>
     </activity>
-    <receiver android:name="com.alamedapps.mymedstimes.AlarmReceiver" android:exported="true">
-        <intent-filter>
-            <action android:name="com.alamedapps.mymedstimes.ACTION_STOP_ALARM" />
-            <action android:name="com.alamedapps.mymedstimes.ACTION_SNOOZE_ALARM" />
-        </intent-filter>
-    </receiver>
+    <receiver
+        android:name=".AlarmReceiver"
+        android:exported="true" />
     <receiver android:enabled="true" android:exported="true" android:name="com.alamedapps.mymedstimes.BootReceiver">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED"/>

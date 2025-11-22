@@ -15,12 +15,11 @@ Notifications.setNotificationHandler({
 
 export function useDeviceAlarm() {
   useEffect(() => {
-    Alarm.requestPermissions()
-      .then(() => {
-        console.log("Permissions granted");
-      })
-      .catch((error) => {
-        console.error("Error requesting permissions:", error);
-      });
+    Alarm.ensureNotificationPermission().then(async (permission) => {
+      if (!permission) {
+        console.warn("Notification permission not granted. Aborting schedule.");
+        return;
+      }
+    });
   }, []);
 }

@@ -1,11 +1,10 @@
-import { NativeModules } from "react-native";
+import { NativeModules, PermissionsAndroid, Platform } from "react-native";
 
 type AlarmParams = {
   id: string; // id único do alarme
   datetimeISO: string; // ISO timestamp (ex: "2025-11-10T08:30:00")
   title?: string;
   body?: string;
-  repeat?: "none" | "daily" | "weekly"; // simplificado
 };
 
 interface AlarmModulePort {
@@ -20,7 +19,24 @@ const { AlarmModule } = NativeModules as {
   AlarmModule: AlarmModulePort;
 };
 
+async function ensureNotificationPermission(): Promise<boolean> {
+  // Android 13+ requires POST_NOTIFICATIONS
+  if (Platform.OS !== "android") return true;
+  const status = await AlarmModule.requestPermissions();
+  if (status.granted) return true;
+
+  if (Platform.Version >= 33) {
+    const req = await PermissionsAndroid.request(
+      "android.permission.POST_NOTIFICATIONS",
+    );
+    return req === PermissionsAndroid.RESULTS.GRANTED;
+  }
+  return true;
+}
+
+
 export default {
+  ensureNotificationPermission,
   scheduleAlarm: (alarm: AlarmParams) => AlarmModule.scheduleAlarm(alarm),
   cancelAlarm: (id: string) => AlarmModule.cancelAlarm(id),
   listAlarms: () => AlarmModule.listAlarms(),

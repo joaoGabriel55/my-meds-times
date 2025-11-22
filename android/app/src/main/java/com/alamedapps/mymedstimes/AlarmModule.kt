@@ -5,19 +5,30 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import java.text.SimpleDateFormat
 import java.util.*
 import android.util.Log
-import android.os.SystemClock
+import org.json.JSONObject
+import android.content.pm.PackageManager
 
 class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+    companion object {
+        private const val PREFS = "alarms"
+        private const val DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss"
+        private const val ACTION_STOP = "com.alamedapps.mymedstimes.ACTION_STOP_ALARM"
+    }
+
     override fun getName(): String = "AlarmModule"
 
     @ReactMethod
     fun requestPermissions(promise: Promise) {
-        // Permissões de notification são solicitadas no JS (ou via Activity).
-        // Apenas resolve true aqui para simplicidade (você pode delegar para Activity).
-        promise.resolve(Arguments.createMap().apply { putBoolean("granted", true) })
+        val granted = if (Build.VERSION.SDK_INT >= 33) {
+            reactApplicationContext.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        } else true
+        val map = Arguments.createMap()
+        map.putBoolean("granted", granted)
+        promise.resolve(map)
     }
 
     @ReactMethod
@@ -32,13 +43,20 @@ class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
             val date = sdf.parse(datetimeISO) ?: throw Exception("Invalid date format")
             val triggerAt = date.time
 
-            Log.d("AlarmModule", "Scheduling alarm for $datetimeISO")
+            val now = System.currentTimeMillis()
+            if (triggerAt < now) {
+                Log.w(
+                    "AlarmModule",
+                    "scheduleAlarm: trigger time is in the past; scheduling anyway (will fire immediately or be skipped)"
+                )
+            }
 
             val alarmManager = reactApplicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val alarmIntent = Intent(reactApplicationContext, AlarmReceiver::class.java)
-            alarmIntent.putExtra("id", id)
-            alarmIntent.putExtra("title", title)
-            alarmIntent.putExtra("body", body)
+            val alarmIntent = Intent(reactApplicationContext, AlarmReceiver::class.java).apply {
+                putExtra("id", id)
+                putExtra("title", title)
+                putExtra("body", body)
+            }
 
             val pendingIntent = PendingIntent.getBroadcast(
                 reactApplicationContext,
@@ -47,16 +65,20 @@ class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+            }
+
             // Use setExactAndAllowWhileIdle para precisão mesmo em Doze
             // alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
 
-            // Aqui você deve persistir o alarme (ex: SharedPreferences) para listagem/cancelamento.
-            saveAlarmToPrefs(id, datetimeISO, title, body)
-
+            saveAlarm(id, datetimeISO, title, body)
             promise.resolve(null)
         } catch (e: Exception) {
-            promise.reject("ERR", e)
+            promise.reject("CANCEL_ERROR", e)
         }
     }
 
@@ -72,10 +94,10 @@ class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
             )
             val am = reactApplicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             am.cancel(pi)
-            removeAlarmFromPrefs(id)
+            removeAlarm(id)
             promise.resolve(null)
         } catch (e: Exception) {
-            promise.reject("ERR", e)
+            promise.reject("CANCEL_ERROR", e)
         }
     }
 
@@ -114,12 +136,12 @@ class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         }
     }
 
-    private fun saveAlarmToPrefs(id: String, datetimeISO: String, title: String, body: String) {
+    private fun saveAlarm(id: String, datetimeISO: String, title: String, body: String) {
         val prefs = reactApplicationContext.getSharedPreferences("alarms", Context.MODE_PRIVATE)
         prefs.edit().putString(id, datetimeISO).apply()
     }
 
-    private fun removeAlarmFromPrefs(id: String) {
+    private fun removeAlarm(id: String) {
         val prefs = reactApplicationContext.getSharedPreferences("alarms", Context.MODE_PRIVATE)
         prefs.edit().remove(id).apply()
     }

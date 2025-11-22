@@ -8,7 +8,7 @@ import android.media.*
 import android.os.Build
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import java.util.Calendar
+import android.util.Log
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -18,79 +18,97 @@ class AlarmReceiver : BroadcastReceiver() {
         private const val ACTION_STOP = "com.alamedapps.mymedstimes.ACTION_STOP_ALARM"
         private const val ACTION_SNOOZE = "com.alamedapps.mymedstimes.ACTION_SNOOZE_ALARM"
         private const val SNOOZE_MINUTES = 5
-    }
 
-    private var player: MediaPlayer? = null
-    private var audioManager: AudioManager? = null
-    private var originalVolume = 0
-    private var currentAlarmId: String? = null
+        @Volatile
+        private var player: MediaPlayer? = null
+
+        @Volatile
+        private var audioManager: AudioManager? = null
+
+        @Volatile
+        private var originalVolume: Int = 0
+
+        @Volatile
+        private var activeAlarmId: String? = null
+    }
 
     override fun onReceive(context: Context, intent: Intent?) {
         intent ?: return
-
         val action = intent.action
-        currentAlarmId = intent.getStringExtra("id") ?: "alarm"
+        val id = intent.getStringExtra("id") ?: return
 
         when (action) {
             ACTION_STOP -> {
-                stopAlarm(context)
+                stopAlarm(context, id)
                 return
             }
 
             ACTION_SNOOZE -> {
-                stopAlarm(context)
+                stopAlarm(context, id)
                 scheduleSnooze(context, intent)
                 return
             }
         }
 
         // Normal alarm trigger
-        val id = currentAlarmId!!
         val title = intent.getStringExtra("title") ?: "Alarm"
         val body = intent.getStringExtra("body") ?: ""
 
+        activeAlarmId = id
+
         setupAudio(context)
-        playAlarm(context)
+        playAlarm(context, id)
         showNotificationWithActions(context, id, title, body)
-        Toast.makeText(context, title, Toast.LENGTH_LONG).show()
     }
 
     private fun setupAudio(context: Context) {
-        audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        originalVolume = audioManager!!.getStreamVolume(AudioManager.STREAM_ALARM)
-        val maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_ALARM)
-        audioManager!!.setStreamVolume(
-            AudioManager.STREAM_ALARM,
-            maxVolume,
-            AudioManager.FLAG_SHOW_UI or AudioManager.FLAG_PLAY_SOUND
-        )
+        if (audioManager == null) {
+            audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        }
 
-        // Request audio focus
-        val attributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_ALARM)
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-            .build()
-
-        val focusRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
-                .setAudioAttributes(attributes)
-                .setOnAudioFocusChangeListener {}
-                .build()
-        } else null
-
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audioManager!!.requestAudioFocus(focusRequest!!)
-        } else {
-            audioManager!!.requestAudioFocus(
-                null,
+        audioManager?.let { am ->
+            originalVolume = am.getStreamVolume(AudioManager.STREAM_ALARM)
+            val maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_ALARM)
+            am.setStreamVolume(
                 AudioManager.STREAM_ALARM,
-                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
+                maxVolume,
+                AudioManager.FLAG_SHOW_UI or AudioManager.FLAG_PLAY_SOUND
             )
+
+            val attributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build()
+
+            val focusRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+                    .setAudioAttributes(attributes)
+                    .setOnAudioFocusChangeListener {}
+                    .build()
+            } else null
+
+            @Suppress("DEPRECATION")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                am.requestAudioFocus(focusRequest!!)
+            } else {
+                am.requestAudioFocus(
+                    null,
+                    AudioManager.STREAM_ALARM,
+                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
+                )
+            }
         }
     }
 
-    private fun playAlarm(context: Context) {
+    private fun playAlarm(context: Context, id: String) {
+        player?.let {
+            try {
+                if (it.isPlaying) it.stop()
+            } catch (_: Exception) {
+            }
+            it.release()
+        }
+
         player = MediaPlayer().apply {
             try {
                 setDataSource(
@@ -112,13 +130,15 @@ class AlarmReceiver : BroadcastReceiver() {
             }
         }
 
-        // Auto-stop after 2 minutes if not dismissed
+        // Auto-stop after 1 minutes if not dismissed
         Thread {
             try {
-                Thread.sleep(120_000)
-            } catch (ignored: InterruptedException) {
+                Thread.sleep(60_000)
+            } catch (_: InterruptedException) {
             } finally {
-                stopAlarm(context)
+                if (activeAlarmId == id) {
+                    stopAlarm(context, id)
+                }
             }
         }.start()
     }
@@ -147,6 +167,7 @@ class AlarmReceiver : BroadcastReceiver() {
             putExtra("id", id)
             putExtra("title", title)
             putExtra("body", "$body (Snoozed)")
+            putExtra("snoozeMinutes", SNOOZE_MINUTES)
         }
         val snoozePendingIntent = PendingIntent.getBroadcast(
             context, id.hashCode() + 2, snoozeIntent,
@@ -163,42 +184,55 @@ class AlarmReceiver : BroadcastReceiver() {
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setContentTitle(title)
             .setContentText(body)
-            .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
-            .setAutoCancel(true)
             .setFullScreenIntent(fullScreenPendingIntent, true)
             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop", stopPendingIntent)
             .addAction(android.R.drawable.ic_menu_recent_history, "Snooze", snoozePendingIntent)
-            .setOngoing(true) // prevents swipe-dismiss
+            .setOngoing(true)            // makes it an ongoing event (cannot be swiped)
+            .setSound(null)              // prevent channel double sound
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .build()
+            .apply {
+                // Prevent 'Clear all' dismissal (FLAG_NO_CLEAR) while still removable via Stop action
+                flags = flags or Notification.FLAG_NO_CLEAR
+            }
 
         nm.notify(id.hashCode(), notification)
     }
 
-    private fun stopAlarm(context: Context) {
+    private fun stopAlarm(context: Context, id: String?) {
         player?.apply {
-            if (isPlaying) stop()
+            try {
+                if (isPlaying) stop()
+            } catch (_: Exception) {
+            }
             release()
         }
         player = null
 
-        audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, originalVolume, 0)
+        audioManager?.let { am ->
+            try {
+                am.setStreamVolume(AudioManager.STREAM_ALARM, originalVolume, 0)
+            } catch (_: Exception) {
+            }
+            @Suppress("DEPRECATION")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                am.abandonAudioFocusRequest(
+                    AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT).build()
+                )
+            } else {
+                am.abandonAudioFocus(null)
+            }
+        }
 
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        currentAlarmId?.let { nm.cancel(it.hashCode()) }
+        id?.let { nm.cancel(it.hashCode()) }
 
-        // Abandon audio focus
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audioManager?.abandonAudioFocusRequest(
-                AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT).build()
-            )
-        } else {
-            audioManager?.abandonAudioFocus(null)
-        }
+        if (activeAlarmId == id) activeAlarmId = null
     }
 
     private fun scheduleSnooze(context: Context, originalIntent: Intent) {
@@ -206,11 +240,12 @@ class AlarmReceiver : BroadcastReceiver() {
         val id = originalIntent.getStringExtra("id") ?: return
         val title = originalIntent.getStringExtra("title") ?: "Alarm"
         val body = originalIntent.getStringExtra("body") ?: ""
+        val minutes = originalIntent.getIntExtra("snoozeMinutes", SNOOZE_MINUTES)
 
         val snoozeIntent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("id", id)
             putExtra("title", title)
-            putExtra("body", "$body (Snoozed)")
+            putExtra("body", body)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -218,7 +253,7 @@ class AlarmReceiver : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val triggerTime = System.currentTimeMillis() + SNOOZE_MINUTES * 60 * 1000
+        val triggerTime = System.currentTimeMillis() + minutes * 60 * 1000
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
@@ -226,6 +261,6 @@ class AlarmReceiver : BroadcastReceiver() {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
         }
 
-        Toast.makeText(context, "Snoozed for $SNOOZE_MINUTES minutes", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Snoozed for $minutes minutes", Toast.LENGTH_SHORT).show()
     }
 }
