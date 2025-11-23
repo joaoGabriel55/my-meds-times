@@ -1,13 +1,14 @@
 import { ThemedText } from "@/components/themed-text";
 import { Shadows } from "@/constants/theme";
-import { formatDateHour, formatDateTime } from "@/helpers/formats";
+import { formatDateTime } from "@/helpers/formats";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { medicationScheduleBuild } from "@/src/domain/MedicationScheduleBuild";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import { TouchableOpacity, View } from "react-native";
 import { useTranslation } from "react-i18next";
+import { TouchableOpacity, View } from "react-native";
+import { MedicationTimeChip } from "./medication-time-chip.component";
 import { styles } from "./my-medications.styles";
 
 interface MedicationCardProps {
@@ -80,7 +81,12 @@ export function MedicationCard({ schedule, onRemove }: MedicationCardProps) {
             { backgroundColor: tint, color: buttonPrimaryText, height: 28 },
           ]}
         >
-          {t("medicationCard.daysLabel", { count: days, days })}
+          {t(
+            days > 1
+              ? "medicationCard.daysLabel_plural"
+              : "medicationCard.daysLabel",
+            { days },
+          )}
         </ThemedText>
         <ThemedText
           style={[
@@ -97,19 +103,7 @@ export function MedicationCard({ schedule, onRemove }: MedicationCardProps) {
         </ThemedText>
         <View style={styles.cardDetails}>
           {scheduleTimes.map((time, index) => (
-            <ThemedText
-              key={index}
-              style={[
-                styles.cardDetail,
-                {
-                  backgroundColor: tint,
-                  color: buttonPrimaryText,
-                  height: 28,
-                },
-              ]}
-            >
-              {formatDateHour(time)}
-            </ThemedText>
+            <MedicationTimeChip key={index} time={time} />
           ))}
         </View>
       </View>
