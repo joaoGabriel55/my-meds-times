@@ -33,7 +33,7 @@ export function MedicationCard({ schedule, onRemove }: MedicationCardProps) {
   const scheduleTimes = medicationScheduleBuild({
     intervalHours,
     startDateTime,
-    days: 3,
+    days,
   });
 
   return (
