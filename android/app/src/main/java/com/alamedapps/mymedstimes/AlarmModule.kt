@@ -16,7 +16,6 @@ class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     companion object {
         private const val PREFS = "alarms"
         private const val DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss"
-        private const val ACTION_STOP = "com.alamedapps.mymedstimes.ACTION_STOP_ALARM"
     }
 
     override fun getName(): String = "AlarmModule"
@@ -35,20 +34,17 @@ class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     fun scheduleAlarm(alarm: ReadableMap, promise: Promise) {
         try {
             val id = alarm.getString("id") ?: UUID.randomUUID().toString()
-            val datetimeISO = alarm.getString("datetimeISO")!!
+            val datetimeISO = alarm.getString("datetimeISO") ?: throw Exception("datetimeISO required")
             val title = alarm.getString("title") ?: "Alarm"
             val body = alarm.getString("body") ?: ""
 
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+            val sdf = SimpleDateFormat(DATE_PATTERN, Locale.getDefault())
             val date = sdf.parse(datetimeISO) ?: throw Exception("Invalid date format")
             val triggerAt = date.time
 
             val now = System.currentTimeMillis()
             if (triggerAt < now) {
-                Log.w(
-                    "AlarmModule",
-                    "scheduleAlarm: trigger time is in the past; scheduling anyway (will fire immediately or be skipped)"
-                )
+                Log.w("AlarmModule", "scheduleAlarm: trigger time in past ($datetimeISO); scheduling anyway.")
             }
 
             val alarmManager = reactApplicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -65,20 +61,17 @@ class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
+            // Single call – avoid duplicate scheduling
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
             } else {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
             }
 
-            // Use setExactAndAllowWhileIdle para precisão mesmo em Doze
-            // alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
-
             saveAlarm(id, datetimeISO, title, body)
             promise.resolve(null)
         } catch (e: Exception) {
-            promise.reject("CANCEL_ERROR", e)
+            promise.reject("SCHEDULE_ERROR", e)
         }
     }
 
@@ -104,12 +97,20 @@ class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     @ReactMethod
     fun listAlarms(promise: Promise) {
         val arr = Arguments.createArray()
-        val prefs = reactApplicationContext.getSharedPreferences("alarms", Context.MODE_PRIVATE)
+        val prefs = reactApplicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val all = prefs.all
-        for ((k, v) in all) {
+        for ((id, rawJson) in all) {
+            val jsonStr = rawJson as? String ?: continue
+            val obj = try {
+                JSONObject(jsonStr)
+            } catch (_: Exception) {
+                continue
+            }
             val map = Arguments.createMap()
-            map.putString("id", k)
-            map.putString("datetimeISO", v as String)
+            map.putString("id", id)
+            map.putString("datetimeISO", obj.optString("datetimeISO"))
+            map.putString("title", obj.optString("title"))
+            map.putString("body", obj.optString("body"))
             arr.pushMap(map)
         }
         promise.resolve(arr)
@@ -118,31 +119,43 @@ class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     @ReactMethod
     fun snoozeAlarm(message: String, snoozeMinutes: Int, promise: Promise) {
         try {
-            val alarmIntent = Intent(reactApplicationContext, AlarmReceiver::class.java)
+            val alarmIntent = Intent(reactApplicationContext, AlarmReceiver::class.java).apply {
+                putExtra("id", UUID.randomUUID().toString())
+                putExtra("title", "Snoozed Alarm")
+                putExtra("body", message)
+            }
             val pendingIntent = PendingIntent.getBroadcast(
                 reactApplicationContext,
-                0,
+                alarmIntent.getStringExtra("id")!!.hashCode(),
                 alarmIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
             val alarmManager = reactApplicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val calendar = Calendar.getInstance()
-            calendar.timeInMillis = System.currentTimeMillis() + 3000 // Set alarm to trigger after 10 seconds
-
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+            val triggerAt = System.currentTimeMillis() + snoozeMinutes * 60_000L
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+            }
+            promise.resolve(null)
         } catch (e: Exception) {
             promise.reject("SNOOZE_ERROR", e)
         }
     }
 
     private fun saveAlarm(id: String, datetimeISO: String, title: String, body: String) {
-        val prefs = reactApplicationContext.getSharedPreferences("alarms", Context.MODE_PRIVATE)
-        prefs.edit().putString(id, datetimeISO).apply()
+        val obj = JSONObject()
+            .put("id", id)
+            .put("datetimeISO", datetimeISO)
+            .put("title", title)
+            .put("body", body)
+        val prefs = reactApplicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        prefs.edit().putString(id, obj.toString()).apply()
     }
 
     private fun removeAlarm(id: String) {
-        val prefs = reactApplicationContext.getSharedPreferences("alarms", Context.MODE_PRIVATE)
+        val prefs = reactApplicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         prefs.edit().remove(id).apply()
     }
 }

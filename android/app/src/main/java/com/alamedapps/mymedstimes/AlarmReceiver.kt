@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.*
 import android.os.Build
+import android.os.PowerManager
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import android.util.Log
@@ -30,6 +31,9 @@ class AlarmReceiver : BroadcastReceiver() {
 
         @Volatile
         private var activeAlarmId: String? = null
+
+        @Volatile
+        private var wakeLock: PowerManager.WakeLock? = null
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
@@ -50,22 +54,38 @@ class AlarmReceiver : BroadcastReceiver() {
             }
         }
 
-        // Normal alarm trigger
         val title = intent.getStringExtra("title") ?: "Alarm"
         val body = intent.getStringExtra("body") ?: ""
-
         activeAlarmId = id
 
+        acquireWakeLock(context)
         setupAudio(context)
         playAlarm(context, id)
         showNotificationWithActions(context, id, title, body)
+    }
+
+    private fun acquireWakeLock(context: Context) {
+        if (wakeLock?.isHeld == true) return
+        val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "mymedstimes:AlarmWakeLock").apply {
+            setReferenceCounted(false)
+            // Acquire for a bounded time (65s) – alarm auto-stops at 60s.
+            acquire(65_000)
+        }
+    }
+
+    private fun releaseWakeLock() {
+        try {
+            if (wakeLock?.isHeld == true) wakeLock?.release()
+        } catch (_: Exception) {
+        }
+        wakeLock = null
     }
 
     private fun setupAudio(context: Context) {
         if (audioManager == null) {
             audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         }
-
         audioManager?.let { am ->
             originalVolume = am.getStreamVolume(AudioManager.STREAM_ALARM)
             val maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_ALARM)
@@ -91,11 +111,7 @@ class AlarmReceiver : BroadcastReceiver() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 am.requestAudioFocus(focusRequest!!)
             } else {
-                am.requestAudioFocus(
-                    null,
-                    AudioManager.STREAM_ALARM,
-                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
-                )
+                am.requestAudioFocus(null, AudioManager.STREAM_ALARM, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
             }
         }
     }
@@ -130,7 +146,6 @@ class AlarmReceiver : BroadcastReceiver() {
             }
         }
 
-        // Auto-stop after 1 minutes if not dismissed
         Thread {
             try {
                 Thread.sleep(60_000)
@@ -192,14 +207,11 @@ class AlarmReceiver : BroadcastReceiver() {
             .setFullScreenIntent(fullScreenPendingIntent, true)
             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop", stopPendingIntent)
             .addAction(android.R.drawable.ic_menu_recent_history, "Snooze", snoozePendingIntent)
-            .setOngoing(true)            // makes it an ongoing event (cannot be swiped)
-            .setSound(null)              // prevent channel double sound
+            .setOngoing(true)
+            .setSound(null)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .build()
-            .apply {
-                // Prevent 'Clear all' dismissal (FLAG_NO_CLEAR) while still removable via Stop action
-                flags = flags or Notification.FLAG_NO_CLEAR
-            }
+            .apply { flags = flags or Notification.FLAG_NO_CLEAR }
 
         nm.notify(id.hashCode(), notification)
     }
@@ -228,6 +240,8 @@ class AlarmReceiver : BroadcastReceiver() {
                 am.abandonAudioFocus(null)
             }
         }
+
+        releaseWakeLock()
 
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         id?.let { nm.cancel(it.hashCode()) }
