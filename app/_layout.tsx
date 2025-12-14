@@ -8,6 +8,7 @@ import { StatusBar } from "expo-status-bar";
 import mobileAds from "react-native-google-mobile-ads";
 import "react-native-reanimated";
 
+import AlarmRingingModal from "@/components/alarm-ringing-modal";
 import { LanguageProvider } from "@/contexts/language-context";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -54,6 +55,7 @@ function RootLayoutNav() {
         <Stack.Screen name="[id]" options={{ headerShown: false }} />
         <Stack.Screen name="settings" options={{ headerShown: false }} />
       </Stack>
+      <AlarmRingingModal />
       <StatusBar
         style={colorScheme === "dark" ? "light" : "dark"}
         backgroundColor={useThemeColor({}, "background")}

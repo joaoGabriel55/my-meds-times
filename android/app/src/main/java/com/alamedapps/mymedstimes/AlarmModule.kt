@@ -21,6 +21,53 @@ class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     override fun getName(): String = "AlarmModule"
 
     @ReactMethod
+    fun getCurrentAlarmPlaying(promise: Promise) {
+      if (AlarmReceiver.activeAlarmId != null) {
+        val map = Arguments.createMap()
+        map.putString("activeAlarmId", AlarmReceiver.activeAlarmId)
+        promise.resolve(map)
+      } else {
+        promise.resolve(null)
+      }
+    }
+
+    // Add this: Stop the current ringing alarm by broadcasting ACTION_STOP
+    @ReactMethod
+    fun stopCurrentAlarm(id: String, promise: Promise) {
+      try {
+        val intent = Intent(reactApplicationContext, AlarmReceiver::class.java).apply {
+          action = AlarmReceiver.ACTION_STOP
+          putExtra("id", id)
+        }
+        reactApplicationContext.sendBroadcast(intent)
+        promise.resolve(null)
+      } catch (e: Exception) {
+          promise.reject("STOP_ERROR", e)
+      }
+    }
+
+    @ReactMethod
+    fun snoozeCurrentAlarm(id: String, minutes: Int, promise: Promise) {
+      try {
+        val alarm = getAlarm(id) ?: throw Exception("Alarm not found")
+        val title = alarm.optString("title", "Alarm")
+        val body = alarm.optString("body", "")
+
+        val intent = Intent(reactApplicationContext, AlarmReceiver::class.java).apply {
+          action = AlarmReceiver.ACTION_SNOOZE
+          putExtra("id", id)
+          putExtra("title", title)
+          putExtra("body", "$body (Snoozed)")
+          putExtra("snoozeMinutes", minutes)
+        }
+        reactApplicationContext.sendBroadcast(intent)
+        promise.resolve(null)
+      } catch (e: Exception) {
+          promise.reject("SNOOZE_ERROR", e)
+      }
+    }
+
+    @ReactMethod
     fun requestPermissions(promise: Promise) {
         val granted = if (Build.VERSION.SDK_INT >= 33) {
             reactApplicationContext.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
@@ -157,5 +204,16 @@ class AlarmModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     private fun removeAlarm(id: String) {
         val prefs = reactApplicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         prefs.edit().remove(id).apply()
+    }
+
+    // Helper to fetch alarm details from prefs (used for snooze)
+    private fun getAlarm(id: String): JSONObject? {
+      val prefs = reactApplicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+      val jsonStr = prefs.getString(id, null) ?: return null
+      return try {
+        JSONObject(jsonStr)
+      } catch (_: Exception) {
+        null
+      }
     }
 }

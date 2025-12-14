@@ -1,5 +1,9 @@
 package com.alamedapps.mymedstimes
 
+import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter
+import com.facebook.react.bridge.WritableMap
+import com.facebook.react.bridge.Arguments
+
 import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,14 +14,15 @@ import android.os.PowerManager
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import android.util.Log
+import com.alamedapps.mymedstimes.MainApplication
 
 class AlarmReceiver : BroadcastReceiver() {
 
     companion object {
+        const val ACTION_STOP = "com.alamedapps.mymedstimes.ACTION_STOP_ALARM"
+        const val ACTION_SNOOZE = "com.alamedapps.mymedstimes.ACTION_SNOOZE_ALARM"
         private const val CHANNEL_ID = "alarm_channel"
         private const val RAW_RES = "alarm"
-        private const val ACTION_STOP = "com.alamedapps.mymedstimes.ACTION_STOP_ALARM"
-        private const val ACTION_SNOOZE = "com.alamedapps.mymedstimes.ACTION_SNOOZE_ALARM"
         private const val SNOOZE_MINUTES = 5
 
         @Volatile
@@ -30,7 +35,7 @@ class AlarmReceiver : BroadcastReceiver() {
         private var originalVolume: Int = 0
 
         @Volatile
-        private var activeAlarmId: String? = null
+        var activeAlarmId: String? = null
 
         @Volatile
         private var wakeLock: PowerManager.WakeLock? = null
@@ -57,6 +62,8 @@ class AlarmReceiver : BroadcastReceiver() {
         val title = intent.getStringExtra("title") ?: "Alarm"
         val body = intent.getStringExtra("body") ?: ""
         activeAlarmId = id
+
+        emitActiveAlarmId(activeAlarmId)
 
         acquireWakeLock(context)
         setupAudio(context)
@@ -206,7 +213,7 @@ class AlarmReceiver : BroadcastReceiver() {
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setFullScreenIntent(fullScreenPendingIntent, true)
             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop", stopPendingIntent)
-            .addAction(android.R.drawable.ic_menu_recent_history, "Snooze", snoozePendingIntent)
+            // .addAction(android.R.drawable.ic_menu_recent_history, "Snooze", snoozePendingIntent)
             .setOngoing(true)
             .setSound(null)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -246,7 +253,10 @@ class AlarmReceiver : BroadcastReceiver() {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         id?.let { nm.cancel(it.hashCode()) }
 
-        if (activeAlarmId == id) activeAlarmId = null
+        if (activeAlarmId == id) {
+          activeAlarmId = null
+          emitActiveAlarmId(activeAlarmId)
+        }
     }
 
     private fun scheduleSnooze(context: Context, originalIntent: Intent) {
@@ -276,5 +286,15 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         Toast.makeText(context, "Snoozed for $minutes minutes", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun emitActiveAlarmId(id: String?) {
+      val reactContext = MainApplication.getReactContext()
+
+      if (reactContext != null && reactContext.hasActiveCatalystInstance()) {
+        reactContext
+          .getJSModule(RCTDeviceEventEmitter::class.java)
+          .emit("activeAlarmId", id)
+      }
     }
 }

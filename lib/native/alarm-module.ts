@@ -13,6 +13,9 @@ interface AlarmModulePort {
   listAlarms(): Promise<AlarmParams[]>;
   requestPermissions(): Promise<{ granted: boolean }>;
   snoozeAlarm(id: string, minutes: number): Promise<void>;
+  stopCurrentAlarm(id: string): Promise<void>;
+  snoozeCurrentAlarm(id: string, minutes: number): Promise<void>;
+  getCurrentAlarmPlaying(): Promise<{ activeAlarmId: string } | null>;
 }
 
 const { AlarmModule } = NativeModules as {
@@ -34,7 +37,6 @@ async function ensureNotificationPermission(): Promise<boolean> {
   return true;
 }
 
-
 export default {
   ensureNotificationPermission,
   scheduleAlarm: (alarm: AlarmParams) => AlarmModule.scheduleAlarm(alarm),
@@ -43,4 +45,8 @@ export default {
   requestPermissions: () => AlarmModule.requestPermissions(),
   snoozeAlarm: (id: string, minutes: number) =>
     AlarmModule.snoozeAlarm(id, minutes),
+  stopCurrentAlarm: (id: string) => AlarmModule.stopCurrentAlarm(id),
+  snoozeCurrentAlarm: (id: string, minutes: number) =>
+    AlarmModule.snoozeCurrentAlarm(id, minutes),
+  getCurrentAlarmPlaying: () => AlarmModule.getCurrentAlarmPlaying(),
 };

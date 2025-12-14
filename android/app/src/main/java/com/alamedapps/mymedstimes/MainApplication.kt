@@ -9,6 +9,7 @@ import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
 import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
 import com.facebook.react.ReactHost
+import com.facebook.react.bridge.ReactContext
 import com.facebook.react.common.ReleaseLevel
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint
 import com.facebook.react.defaults.DefaultReactNativeHost
@@ -17,6 +18,18 @@ import expo.modules.ApplicationLifecycleDispatcher
 import expo.modules.ReactNativeHostWrapper
 
 class MainApplication : Application(), ReactApplication {
+
+  companion object {
+    private var reactContextInstance: ReactContext? = null
+
+    fun setReactContext(context: ReactContext?) {
+      reactContextInstance = context
+    }
+
+    fun getReactContext(): ReactContext? {
+      return reactContextInstance
+    }
+  }
 
   override val reactNativeHost: ReactNativeHost = ReactNativeHostWrapper(
       this,

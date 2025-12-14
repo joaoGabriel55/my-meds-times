@@ -19,8 +19,13 @@ class MainActivity : ReactActivity() {
     // setTheme(R.style.AppTheme);
     // @generated begin expo-splashscreen - expo prebuild (DO NOT MODIFY) sync-f3ff59a738c56c9a6119210cb55f0b613eb8b6af
     SplashScreenManager.registerOnActivity(this)
-    // @generated end expo-splashscreen
-    super.onCreate(null)
+
+    val bundle = savedInstanceState ?: Bundle()
+    intent?.getStringExtra("id")?.let {
+      bundle.putString("alarmId", it)
+    }
+
+    super.onCreate(bundle) // This sends alarmId to JS as initial props
   }
 
   /**

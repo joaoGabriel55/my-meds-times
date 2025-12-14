@@ -6,11 +6,12 @@ import { useThemeColor } from "@/hooks/use-theme-color";
 export function MedicationTimeChip({ time }: { time: Date }) {
   const tint = useThemeColor({}, "tint");
   const buttonPrimaryText = useThemeColor({}, "buttonPrimaryText");
+  const cardBg = useThemeColor({}, "card");
 
   const passedTime = time.getTime() < new Date().getTime();
 
   const defaultStyle = {
-    backgroundColor: buttonPrimaryText,
+    backgroundColor: cardBg,
     color: tint,
     borderColor: tint,
     borderStyle: "solid",
