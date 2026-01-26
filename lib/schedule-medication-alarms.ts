@@ -18,6 +18,7 @@ export async function scheduleMedicationAlarms(
       datetimeISO: format(scheduledTime, "yyyy-MM-dd'T'HH:mm:ss"),
       title: medicationSchedule.name,
       body: medicationSchedule.description ?? "Time to take your medication",
+      snoozeEnabled: false,
     }),
   );
 
