@@ -1,7 +1,8 @@
 import { ThemedText } from "@/components/themed-text";
+import { BannerAd } from "@/components/ui/banner-ad";
 import { Shadows } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { removeMedicationNotifications } from "@/lib/schedule-medication-notifications";
+import { removeMedicationAlarms } from "@/lib/schedule-medication-alarms";
 import { MedicationScheduleService } from "@/src/domain/MedicationScheduleService";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
 import { container } from "@/src/infrastructure/container";
@@ -13,7 +14,6 @@ import { ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MedicationCard } from "./medication-card.component";
 import { styles } from "./my-medications.styles";
-import { BannerAd } from "@/components/ui/banner-ad";
 
 const { MedicationScheduleRepository } = container;
 const medicationScheduleRepository = MedicationScheduleRepository();
@@ -56,7 +56,7 @@ export function MyMedications() {
 
       setSchedules(schedules.filter((schedule) => schedule.id !== id));
 
-      await removeMedicationNotifications(schedule);
+      await removeMedicationAlarms(schedule);
     } catch (error) {
       console.error("Error removing medication schedule:", error);
     }

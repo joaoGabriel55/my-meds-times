@@ -1,12 +1,9 @@
+import Alarm from "@/lib/native/alarm-module";
 import { medicationScheduleBuild } from "@/src/domain/MedicationScheduleBuild";
 import { MedicationSchedule } from "@/src/domain/models/MedicationSchedule";
-import { SchedulableTriggerInputTypes } from "expo-notifications";
-import {
-  cancelPushNotification,
-  schedulePushNotification,
-} from "./notifications";
+import { format } from "date-fns/format";
 
-export async function scheduleMedicationNotifications(
+export async function scheduleMedicationAlarms(
   medicationSchedule: MedicationSchedule,
 ): Promise<void> {
   const scheduledTimes = medicationScheduleBuild({
@@ -15,25 +12,21 @@ export async function scheduleMedicationNotifications(
     days: medicationSchedule.days,
   });
 
-  const notificationPromises = scheduledTimes.map((scheduledTime) =>
-    schedulePushNotification({
-      identifier: `medication-${medicationSchedule.id}-${scheduledTime.getTime()}`,
-      content: {
-        title: medicationSchedule.name,
-        body: medicationSchedule.description ?? "Time to take your medication",
-      },
-      trigger: {
-        type: SchedulableTriggerInputTypes.DATE,
-        date: scheduledTime,
-      },
+  const alarmPromises = scheduledTimes.map((scheduledTime) =>
+    Alarm.scheduleAlarm({
+      id: `medication-${medicationSchedule.id}-${scheduledTime.getTime()}`,
+      datetimeISO: format(scheduledTime, "yyyy-MM-dd'T'HH:mm:ss"),
+      title: medicationSchedule.name,
+      body: medicationSchedule.description ?? "Time to take your medication",
+      snoozeEnabled: false,
     }),
   );
 
-  await Promise.all(notificationPromises);
+  await Promise.all(alarmPromises);
   console.log("Medication notifications scheduled successfully");
 }
 
-export async function removeMedicationNotifications(
+export async function removeMedicationAlarms(
   medicationSchedule: MedicationSchedule,
 ): Promise<void> {
   const scheduledTimes = medicationScheduleBuild({
@@ -42,12 +35,12 @@ export async function removeMedicationNotifications(
     days: medicationSchedule.days,
   });
 
-  const notificationPromises = scheduledTimes.map((scheduledTime) =>
-    cancelPushNotification(
+  const alarmPromises = scheduledTimes.map((scheduledTime) =>
+    Alarm.cancelAlarm(
       `medication-${medicationSchedule.id}-${scheduledTime.getTime()}`,
     ),
   );
 
-  await Promise.all(notificationPromises);
+  await Promise.all(alarmPromises);
   console.log("Medication notifications removed successfully");
 }
